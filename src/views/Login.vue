@@ -32,6 +32,11 @@ export default {
       feedback: null,
     };
   },
+  created(){
+    if(this.token){
+        this.$router.push({ name: "Home" })
+    }
+  },
   methods: {
     login() {
       if (!this.email || !this.password) {
@@ -47,9 +52,9 @@ export default {
         })
         .then((res) => {
           localStorage.setItem("token", res.data.token);
-          this.feedback = "User created!";
+          this.feedback = "Loging in!";
           //count down
-          //   this.conutDown();
+            this.conutDown();
         })
         .catch((err) => {
           console.log(err);
@@ -59,7 +64,7 @@ export default {
       this.feedback = `Redirecting in ${this.conut}`;
       this.conut--;
       if (this.conut < 0) {
-        return this.$router.push({ name: "Home" });
+        return location.reload();
       }
       setTimeout(() => {
         this.conutDown();
