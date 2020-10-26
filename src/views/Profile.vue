@@ -81,7 +81,7 @@ export default {
       if(!localStorage.getItem('token')){
           this.$router.push({name:'Home'})
       }
-    //checks for valid user data
+    //waits for valid user data
     const checkForUser = setInterval(() => {
       if(this.user){
         this.name = this.user.name

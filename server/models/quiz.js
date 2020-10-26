@@ -2,6 +2,11 @@ const mongoose = require('mongoose')
 
 //contactor for quiz
 const quizSchema = mongoose.Schema({
+    name:{
+        type:String,
+        required:true,
+        default:'New Quiz'
+    },
     questions:[],
     owner:{
         type:mongoose.Schema.Types.ObjectId,

@@ -1,6 +1,7 @@
 <template>
   <v-app class="new-quiz">
     <h1>Quiz Maker</h1>
+    <h2><input type="text" class="new-quiz__quiz-name" v-model="quizName"></h2>
     <ul>
       <li
         v-for="(question, index) in questions"
@@ -62,6 +63,7 @@ export default {
   data() {
     return {
       questions: [],
+      quizName:'New Quiz'
     };
   },
   created() {
@@ -95,7 +97,7 @@ export default {
       this.questions.push(newQuestion);
     },
     saveQuiz() {
-      axios.post("/api/quiz", {questions:this.questions}, {
+      axios.post("/api/quiz", {name:this.quizName,questions:this.questions}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -119,6 +121,14 @@ export default {
 
   * {
     margin: 0 auto;
+  }
+
+  h1,h2{
+    margin-bottom: 20px;
+  }
+
+  &__quiz-name{
+    text-align: center;
   }
 
   &__btn {
