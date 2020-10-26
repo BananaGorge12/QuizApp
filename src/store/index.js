@@ -15,36 +15,45 @@ export default new Vuex.Store({
       return token
     },
     //user data
-    user: null
+    user: null,
+    //quizzes
+    quizzes:null,
   },
   mutations: {
     //send data to state
-    loadUserData: (state, payload) => (state.user = payload)
+    loadUserData: (state, payload) => (state.user = payload),
+    loadQuizzes: (state, payload) => (state.quizzes = payload)
   },
   actions: {
     //get data from db
     loadUserDataFromDB(context) {
       if (this.state.token()) {
-        return new Promise((resolve, reject) => {
-
-          axios.get('/api/users/me', {
+          return axios.get('/api/users/me', {
             headers: {
               'Authorization': `Bearer ${this.state.token()}`
-
             }
           }).then(res => {
             // sends data to mutation
             context.commit('loadUserData', res.data)
-            //end of promise
-            resolve()
 
           }).catch(err => {
-            //end of promise
-            reject(err)
+            console.error(err)
           })
-        })
       } return null
 
+    },
+    loadQuizzesFromDB(context){
+      if (this.state.token()){
+        return axios.get('/api/quiz',{
+          headers: {
+            'Authorization': `Bearer ${this.state.token()}`
+          }
+        }).then(res => {
+          context.commit('loadQuizzes',res.data)
+        }).catch(err => {
+          console.error(err)
+        })
+      } return null
     }
   },
   modules: {

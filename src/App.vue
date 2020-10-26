@@ -15,28 +15,30 @@ export default {
   data() {
     return {};
   },
-  created(){
-    //loads user
-    this.getUser()
-  },
   methods: {
     //gets user
-    getUser() {
-      this.$store.dispatch("loadUserDataFromDB").then(() => {
-        this.user
-        // console.log(this.user)
-      });
+    async getUser() {
+      await this.$store.dispatch("loadUserDataFromDB");
+    },
+    //gets quizzes
+    async getQuizzes() {
+      await this.$store.dispatch("loadQuizzesFromDB");
     },
   },
-  computed: {
-    user() {
+  asyncComputed: {
+    async quizzes() {
+      await this.getQuizzes()
+      return this.$store.state.quizzes;
+    },
+    async user() {
+      await this.getUser();
       return this.$store.state.user;
     },
   },
 };
 </script>
 <style lang="scss">
-*{
+* {
   box-sizing: border-box;
 }
 

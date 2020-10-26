@@ -25,6 +25,12 @@
         <v-icon>mdi-card-account-details</v-icon>
       </v-btn>
 
+      <v-btn v-if="user" to="/new-quiz">
+        <span>New Quiz</span>
+
+        <v-icon>mdi-pencil</v-icon>
+      </v-btn>
+
       <v-btn id="navbar__logout" @click="dialog = true" v-if="user">
         <span>Logout</span>
 
@@ -35,11 +41,18 @@
     <v-row justify="center">
       <v-dialog v-model="dialog" persistent max-width="290">
         <v-card>
-          <v-card-title class="headline">Are You Sure That You Want To Logout?</v-card-title>
-          <v-card-text>When you logout you won't be able to access your account and test until you log back in.</v-card-text>
+          <v-card-title class="headline"
+            >Are You Sure That You Want To Logout?</v-card-title
+          >
+          <v-card-text
+            >When you logout you won't be able to access your account and test
+            until you log back in.</v-card-text
+          >
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
+            <v-btn color="blue darken-1" text @click="dialog = false"
+              >Cancel</v-btn
+            >
             <v-btn color="blue darken-1" text @click="logout">Logout</v-btn>
           </v-card-actions>
         </v-card>
@@ -54,7 +67,7 @@ export default {
   data() {
     return {
       value: 1,
-      dialog:false,
+      dialog: false,
     };
   },
   methods: {

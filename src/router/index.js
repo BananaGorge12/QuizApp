@@ -5,6 +5,7 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Signup from '../views/Signup.vue'
 import Profile from '../views/Profile.vue'
+import newQuiz from '../views/NewQuiz.vue'
 import NotFound from '../views/404.vue'
 
 Vue.use(VueRouter)
@@ -29,6 +30,11 @@ const routes = [
     path:'/profile',
     name:'Profile',
     component:Profile
+  },
+  {
+    path:'/new-quiz',
+    name:'newQuiz',
+    component:newQuiz
   },
   {
     path:'/*',

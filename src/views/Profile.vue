@@ -3,11 +3,11 @@
     <h1>Profile</h1>
 
     <h3 class="h3">Name:</h3>
-    <p v-if="!edit" class="subtitle-1">{{ user.name }}</p>
+    <p v-if="!edit" class="subtitle-1">{{ name }}</p>
     <input class="profile__input" v-model="name" v-else />
 
     <h3 class="h3">Email:</h3>
-    <p v-if="!edit" class="subtitle-1">{{ user.email }}</p>
+    <p v-if="!edit" class="subtitle-1">{{ email }}</p>
     <input class="profile__input" v-model="email" v-else />
 
     <h3 v-if="edit" class="h3">New Password:</h3>
@@ -43,55 +43,56 @@
   </v-app>
 </template>
 <script>
-import axios from 'axios'
+import axios from "axios";
 export default {
   name: "Profile",
   data() {
     return {
       edit: false,
-      name:null,
-      email:null,
-      password:null
+      name: null,
+      email: null,
+      password: null,
     };
   },
   methods: {
-    //gets user
-    getUser() {
-      if (!this.user) {
-        this.$store.dispatch("loadUserDataFromDB").then(() => {
-          this.name = this.user.name
-          this.email = this.user.email
-          return this.user;
-        });
-      }
-    },
-    updateUser(){
-        const newUser = {}
-        if(this.name) newUser.name = this.name
-        if(this.email) newUser.email = this.email
-        if(this.password) newUser.password = this.password
-        console.log(newUser)
+    //updates user
+    updateUser() {
+      const newUser = {};
+      if (this.name) newUser.name = this.name;
+      if (this.email) newUser.email = this.email;
+      if (this.password) newUser.password = this.password;
+      console.log(newUser);
 
-        axios.patch('/api/users/me',newUser,{
-            headers:{
-                "Authorization":`Bearer ${localStorage.getItem('token')}`
-            }
-        }).then(() => {
-            location.reload()
-        }).catch(err => {
-            console.log(err)
+      axios
+        .patch("/api/users/me", newUser, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         })
-    }
+        .then(() => {
+          location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
   created() {
-    this.getUser();
+      if(!localStorage.getItem('token')){
+          this.$router.push({name:'Home'})
+      }
+    //checks for valid user data
+    const checkForUser = setInterval(() => {
+      if(this.user){
+        this.name = this.user.name
+        this.email = this.user.email
+        clearInterval(checkForUser)
+      }
+    },100)
   },
   computed: {
     user() {
       return this.$store.state.user;
-    },
-    token(){
-        return this.$store.state.token
     }
   },
 };
