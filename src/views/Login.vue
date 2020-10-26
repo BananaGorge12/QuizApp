@@ -5,10 +5,14 @@
       <v-text-field v-model="email" label="E-mail" required></v-text-field>
 
       <v-text-field
-        label="Password"
-        required
-        :type="show1 ? 'text' : 'password'"
         v-model="password"
+        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="show1 ? 'text' : 'password'"
+        name="input-10-1"
+        label="Password"
+        hint="At least 8 characters"
+        counter
+        @click:append="show1 = !show1"
       ></v-text-field>
 
       <v-btn @click="login" color="blue">login!</v-btn>
@@ -30,11 +34,19 @@ export default {
       password: null,
       conut: 5,
       feedback: null,
+      //vuetifiy rules
+      emailRules: [
+        (v) => !!v || "E-mail is required",
+        (v) => /.+@.+/.test(v) || "E-mail must be valid",
+      ],
+      rules: {
+        required: (value) => !!value || "Required.",
+      },
     };
   },
-  created(){
-    if(this.token){
-        this.$router.push({ name: "Home" })
+  created() {
+    if (this.token) {
+      this.$router.push({ name: "Home" });
     }
   },
   methods: {
@@ -53,22 +65,11 @@ export default {
         .then((res) => {
           localStorage.setItem("token", res.data.token);
           this.feedback = "Loging in!";
-          //count down
-            this.conutDown();
+          location.reload()
         })
         .catch((err) => {
           console.log(err);
         });
-    },
-    conutDown() {
-      this.feedback = `Redirecting in ${this.conut}`;
-      this.conut--;
-      if (this.conut < 0) {
-        return location.reload();
-      }
-      setTimeout(() => {
-        this.conutDown();
-      }, 1000);
     },
   },
   computed: {

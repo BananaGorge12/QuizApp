@@ -16,6 +16,7 @@ export default {
     return {};
   },
   created(){
+    //loads user
     this.getUser()
   },
   methods: {

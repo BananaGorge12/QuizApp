@@ -4,13 +4,19 @@
     <v-form class="signup__form">
       <v-text-field v-model="name" label="Name" required></v-text-field>
 
-      <v-text-field v-model="email" label="E-mail" required></v-text-field>
+      <v-text-field
+        v-model="email"
+        label="E-mail"
+      ></v-text-field>
 
       <v-text-field
-        label="Password"
-        required
-        :type="show1 ? 'text' : 'password'"
         v-model="password"
+        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="show1 ? 'text' : 'password'"
+        name="input-10-1"
+        label="Password"
+        counter
+        @click:append="show1 = !show1"
       ></v-text-field>
 
       <v-btn @click="signup" color="blue">Signup!</v-btn>
@@ -31,6 +37,11 @@ export default {
       password: null,
       name: null,
       conut: 5,
+      //vuetifiy rules
+      rules: {
+        required: (value) => !!value || "Required.",
+        emailMatch: () => `The email and password you entered don't match`,
+      },
     };
   },
   methods: {
@@ -48,25 +59,26 @@ export default {
           email: this.email,
           password: this.password,
         })
-        .then(() => {
+        .then(res => {
           this.feedback = "User created!";
-
-          //count down
-          this.conutDown();
+          localStorage.setItem('token',res.data.token)
+          location.reload()
         })
         .catch((err) => {
           this.feedback = err;
         });
     },
-    conutDown() {
-      this.feedback = `Redirecting in ${this.conut}`;
-      this.conut--;
-      if (this.conut < 0) {
-        return this.$router.push({ name: "Home" });
-      }
-      setTimeout(() => {this.conutDown();},1000)
-    },
   },
+  created(){
+    if(this.user){
+      this.$router.push({name:'Home'})
+    }
+  },
+  computed:{
+    user(){
+      return this.$store.state.token()
+    }
+  }
 };
 </script>
 <style lang="scss">

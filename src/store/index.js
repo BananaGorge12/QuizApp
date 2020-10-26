@@ -6,35 +6,44 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    token(){
+    //gets jwt from local storage
+    token() {
       const token = localStorage.getItem('token')
-      if(!token){
+      if (!token) {
         return null
       }
       return token
     },
-    user:null
+    //user data
+    user: null
   },
   mutations: {
-    loadUserData:(state,payload) => (state.user = payload)
+    //send data to state
+    loadUserData: (state, payload) => (state.user = payload)
   },
   actions: {
-    loadUserDataFromDB(context){
-      if(this.state.token()){
-        return new Promise((resolve,reject) => {
-          axios.get('/api/users/me',{
-            headers:{
-              'Authorization':`Bearer ${this.state.token()}`
-          }}).then(res => {
-            // console.log(res.data)
-            context.commit('loadUserData',res.data)
+    //get data from db
+    loadUserDataFromDB(context) {
+      if (this.state.token()) {
+        return new Promise((resolve, reject) => {
+
+          axios.get('/api/users/me', {
+            headers: {
+              'Authorization': `Bearer ${this.state.token()}`
+
+            }
+          }).then(res => {
+            // sends data to mutation
+            context.commit('loadUserData', res.data)
+            //end of promise
             resolve()
+
           }).catch(err => {
-            console.log(err)
-            reject()
+            //end of promise
+            reject(err)
           })
         })
-      }
+      } return null
 
     }
   },
