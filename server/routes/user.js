@@ -45,7 +45,7 @@ router.post('/api/users/login', async (req,res) => {
         res.send({ user, token })
     } catch (err) {
         console.log(err)
-        res.status(400).send(err)
+        res.status(400).send({ error:'Please make a vaild request' })
     }
 })
 
@@ -78,7 +78,7 @@ router.patch('/api/users/me',auth, async (req,res) => {
 
         res.send(req.user)
     } catch (err) {
-        res.status(400).send(err)
+        res.status(400).send({error:'invalid operation'})
     }
 })
 

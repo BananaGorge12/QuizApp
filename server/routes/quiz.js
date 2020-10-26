@@ -49,7 +49,7 @@ router.get('/api/quiz/:id',auth,async (req,res) => {
        
        res.send(quiz)
     } catch (err) {
-        res.status(404).send(err)
+        res.status(404).send({ error:'no quiz found' })
     }
 })
 
@@ -67,7 +67,7 @@ router.patch('/api/quiz/:id',auth,async (req,res) => {
         res.send(quiz)
 
     } catch (err) {
-        res.status(404).send(err)
+        res.status(404).send({ error:'no quiz found' })
     }
 })
 
