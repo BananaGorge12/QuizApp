@@ -3,7 +3,7 @@
     <h1>Home</h1>
     <h3>Your Quizzes</h3>
     <ul>
-        <li v-for="(quiz,index) in quizzes" :key="index"><a>{{quiz.name}}</a></li>
+        <li v-for="(quiz,index) in quizzes" :key="index"><router-link :to="{name:'editQuiz',params:{id:quiz._id}}">{{quiz.name}}</router-link></li>
     </ul>
   </v-app>
 </template>
@@ -20,7 +20,6 @@ export default {
     const checkForData = setInterval(() => {
       if (this.storeQuizzes) {
         this.quizzes = this.storeQuizzes;
-        console.log(this.quizzes)
         clearInterval(checkForData);
       }
     }, 100);

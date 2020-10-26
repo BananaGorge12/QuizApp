@@ -6,6 +6,7 @@ import Login from '../views/Login.vue'
 import Signup from '../views/Signup.vue'
 import Profile from '../views/Profile.vue'
 import newQuiz from '../views/NewQuiz.vue'
+import editQuiz from '../views/EditQuiz.vue'
 import NotFound from '../views/404.vue'
 
 Vue.use(VueRouter)
@@ -35,6 +36,11 @@ const routes = [
     path:'/new-quiz',
     name:'newQuiz',
     component:newQuiz
+  },
+  {
+    path:'/quiz/:id/edit',
+    name:'editQuiz',
+    component:editQuiz
   },
   {
     path:'/*',

@@ -64,7 +64,7 @@ router.get('/api/users/me',auth,(req,res) => {
 router.patch('/api/users/me',auth, async (req,res) => {
     //checks for invaild operations
     const updates = Object.keys(req.body)
-    const allowedUpdate = ['name','email','password','age']
+    const allowedUpdate = ['name','email','password']
     const isVaildOperation = updates.every(update => allowedUpdate.includes(update))
 
     if(!isVaildOperation){
