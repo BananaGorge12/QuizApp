@@ -23,7 +23,8 @@ export default {
     //gets user
     getUser() {
       this.$store.dispatch("loadUserDataFromDB").then(() => {
-        this.user;
+        this.user
+        // console.log(this.user)
       });
     },
   },
@@ -35,6 +36,10 @@ export default {
 };
 </script>
 <style lang="scss">
+*{
+  box-sizing: border-box;
+}
+
 .v-application--wrap {
   min-height: 0;
 }
