@@ -35,6 +35,13 @@ const userSchema = mongoose.Schema({
     }]
 })
 
+userSchema.virtual('quizs', {
+    ref: 'Quiz',
+    localField: '_id',
+    foreignField: 'owner'
+})
+
+
 // hashes password on create/change
 userSchema.pre('save', async function(next){
 

@@ -17,6 +17,8 @@ require('./db/mongoose.js')
 //loads routes
 const userRoutes = require('./routes/user')
 app.use(userRoutes)
+const quizRoutes = require('./routes/quiz')
+app.use(quizRoutes)
 
 
 app.listen(port,() => {
