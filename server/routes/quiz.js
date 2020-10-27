@@ -43,9 +43,9 @@ router.get('/api/quiz',auth,async (req,res) => {
 
 
 //get quiz by id
-router.get('/api/quiz/:id',auth,async (req,res) => {
+router.get('/api/quiz/:id',async (req,res) => {
     try {
-       const quiz = await Quiz.findOne({ owner:req.user._id, _id:req.params.id })
+       const quiz = await Quiz.findById(req.params.id)
        
        res.send(quiz)
     } catch (err) {

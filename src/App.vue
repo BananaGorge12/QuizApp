@@ -50,4 +50,8 @@ export default {
   color: #e53935;
   margin-top: 20px;
 }
+
+.u-pointer{
+  cursor: pointer;
+}
 </style>

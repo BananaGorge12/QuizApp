@@ -11,6 +11,7 @@
         class="edit-quiz__question"
       >
         <h3>
+          <v-icon @click="deleteQuestion(index)" >mdi-trash-can</v-icon>
           <input
             class="edit-quiz__title-input"
             type="text"
@@ -85,6 +86,17 @@ export default {
     }, 100);
   },
   methods: {
+    deleteQuestion(questionIndex){
+      let index = 0
+      this.quiz.questions = this.quiz.questions.filter(() => {
+        if(index == questionIndex){
+          index = index + 1
+          return false
+        }
+        index = index + 1
+        return true
+      })
+    },
     addNewQuestion() {
       const newQuestion = {
         title: `Question ${this.quiz.questions.length + 1}`,
@@ -118,8 +130,7 @@ export default {
             this.$router.push({name:'Home'})
             location.reload()
         }).catch(err => {
-          err
-            // alert(err)
+          console.log(err)
         })
     },
   },

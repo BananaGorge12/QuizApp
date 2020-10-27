@@ -8,6 +8,7 @@
         :key="index"
         class="new-quiz__question"
       >
+        <v-icon @click="deleteQuestion(index)" >mdi-trash-can</v-icon>
         <h3>
           <input
             class="new-quiz__title-input"
@@ -72,6 +73,17 @@ export default {
       }
   },
   methods: {
+    deleteQuestion(questionIndex){
+      let index = 0
+      this.questions = this.questions.filter(() => {
+        if(index == questionIndex){
+          index = index + 1
+          return false
+        }
+        index = index + 1
+        return true
+      })
+    },
     addNewQuestion() {
       const newQuestion = {
         title: `Question ${this.questions.length + 1}`,
