@@ -62,6 +62,7 @@
   </v-app>
 </template>
 <script>
+import axios from 'axios'
 export default {
   name: "Navbar",
   data() {
@@ -73,8 +74,16 @@ export default {
   methods: {
     //loges user out
     logout() {
-      localStorage.removeItem("token");
-      location.reload();
+      axios.post('/api/users/logout',{},{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,}
+      }).then((res) => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+        localStorage.removeItem("token");
+        location.reload();
+      })
     },
   },
   computed: {

@@ -45,9 +45,19 @@ export default {
     };
   },
   created() {
-    if (this.token) {
-      this.$router.push({ name: "Home" });
-    }
+    let timesLooped = 0
+    const loop = setInterval(() => {
+      if (this.user) {
+        clearInterval(loop)
+        this.$router.push({ name: "Home" });
+      }
+
+      else if(timesLooped > 100){
+        clearInterval(loop)
+      }
+
+      timesLooped++
+    }, 100);
   },
   methods: {
     login() {
@@ -65,7 +75,7 @@ export default {
         .then((res) => {
           localStorage.setItem("token", res.data.token);
           this.feedback = "Loging in!";
-          location.reload()
+          location.reload();
         })
         .catch((err) => {
           console.log(err);
@@ -73,8 +83,8 @@ export default {
     },
   },
   computed: {
-    token() {
-      return this.$store.state.token();
+    user() {
+      return this.$store.state.user;
     },
   },
 };
