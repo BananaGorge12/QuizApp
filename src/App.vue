@@ -51,6 +51,15 @@ export default {
   margin-top: 20px;
 }
 
+.u-link{
+  color: #2196F3;
+  cursor: pointer;
+
+  &:hover{
+    text-decoration: underline;
+  }
+}
+
 .u-pointer{
   cursor: pointer;
 }

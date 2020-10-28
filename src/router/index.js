@@ -9,6 +9,7 @@ import newQuiz from '../views/NewQuiz.vue'
 import editQuiz from '../views/EditQuiz.vue'
 import NotFound from '../views/404.vue'
 import takeQuiz from '../views/TakeQuiz.vue'
+import quizPage from '../views/QuizPage.vue'
 
 Vue.use(VueRouter)
 
@@ -37,6 +38,11 @@ const routes = [
     path:'/new-quiz',
     name:'newQuiz',
     component:newQuiz
+  },
+  {
+    path:'/quiz/:id/view',
+    name:'quizPage',
+    component:quizPage
   },
   {
     path:'/quiz/:id/edit',

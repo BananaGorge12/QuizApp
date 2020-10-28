@@ -32,7 +32,8 @@ const userSchema = mongoose.Schema({
             type:String,
             required:true
         }
-    }]
+    }],
+    assignedQuizzes:[]
 })
 
 userSchema.virtual('quizs', {

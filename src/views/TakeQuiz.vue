@@ -32,13 +32,43 @@ export default {
         }
     },
     async created(){
+        await this.loadUser()
         await this.loadQuiz()
     },
     methods:{
         turnInQuiz(){
+            //tells vue user finished the quiz
             this.finished = true
-            this.score = this.checkQuiz()
+
+            //checks quiz
+            const score = this.checkQuiz()
+            this.score = `${score}/100`
+
+            //genarate results object
+            // const result = this.generateResultsObject(score)
         },
+
+        generateResultsObject(score){
+            //constactor for results
+            const results = {
+                name:this.user.name,
+                email:this.user.email,
+                score,
+                answers:[]
+            } 
+
+            //puts answers in object
+            this.quiz.questions.forEach(question => {
+                results.answers.push({
+                    title:question.title,
+                    answers:question.selected,
+                    correctAnswer:this.getCorrectAnswer(question)
+                })
+            })
+            
+            return results
+        },
+        //calc quiz result
         checkQuiz(){
             let correctAnswers = 0
 
@@ -52,8 +82,9 @@ export default {
             })
 
             const score = correctAnswers * (100/this.quiz.questions.length)
-            return `${score}/100`
+            return Math.round(score)
         },
+
         async loadQuiz(){
             await axios.get(`/api/quiz/${this.$route.params.id}`).then(res => {
                 this.quiz = res.data
@@ -61,10 +92,29 @@ export default {
                 console.error(err)
             })
         },
-        newName(){
-            this.currentName = Math.random()
-            console.log(this.currentName)
-            return null
+
+        loadUser(){
+            let timesLooped = 0
+            const loop = setInterval(() => {
+                if (this.user) {
+                    clearInterval(loop)
+                }
+
+                else if(timesLooped > 100){
+                    clearInterval(loop)
+                    this.$router.push({ name: "Home" });
+                }
+                    timesLooped++
+            }, 100);
+        },
+        getCorrectAnswer(question){
+            const correctAnswer = question.options.filter(option => option.correct)
+            return correctAnswer[0].title
+        }
+    },
+    computed:{
+        user(){
+            return this.$store.state.user
         }
     },
 }
