@@ -106,4 +106,4 @@ dist
 
 
 #secret folder
-server/secret
+# server/secret
