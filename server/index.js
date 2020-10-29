@@ -1,4 +1,7 @@
 const express = require('express')
+const path = require('path')
+const history = require('connect-history-api-fallback')
+
 
 //start express
 const app = express()
@@ -19,6 +22,17 @@ const userRoutes = require('./routes/user')
 app.use(userRoutes)
 const quizRoutes = require('./routes/quiz')
 app.use(quizRoutes)
+
+
+
+//configre express to use the vue router
+const staticFileMiddleware = express.static(path.join(__dirname,'/dist'));
+app.use(staticFileMiddleware);
+app.use(history({
+  disableDotRule: true,
+  verbose: true
+}));
+app.use(staticFileMiddleware);
 
 
 app.listen(port,() => {
