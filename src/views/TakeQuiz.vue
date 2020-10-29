@@ -37,8 +37,21 @@ export default {
     async created(){
         await this.loadUser()
         await this.loadQuiz()
+        this.validiteUser()
     },
     methods:{
+        validiteUser(){
+            let isUserAllowed = false
+            this.quiz.students.forEach(student => {
+                if(student.id == this.user._id){
+                    isUserAllowed = true
+                }
+            })
+
+            if(!isUserAllowed){
+                this.$router.push({ name: "Home" });
+            }
+        },
         turnInQuiz(){
             //tells vue user finished the quiz
             this.finished = true

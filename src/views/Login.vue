@@ -10,7 +10,6 @@
         :type="show1 ? 'text' : 'password'"
         name="input-10-1"
         label="Password"
-        hint="At least 8 characters"
         counter
         @click:append="show1 = !show1"
       ></v-text-field>
@@ -29,7 +28,7 @@ export default {
   name: "Login",
   data() {
     return {
-      show1: 1,
+      show1: false,
       email: null,
       password: null,
       conut: 5,
@@ -41,6 +40,7 @@ export default {
       ],
       rules: {
         required: (value) => !!value || "Required.",
+        emailMatch: () => `The email and password you entered don't match`,
       },
     };
   },
