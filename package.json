@@ -8,7 +8,8 @@
     "db": "/Users/BananaGorge666/db/mongodb/bin/mongod.exe --dbpath=/Users/BananaGorge666/db/mongodb-data",
     "dev": "vue-cli-service serve",
     "server": "nodemon server/index.js -e js,vue",
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "deploy":"git add .; git commit -m\"deploy\"; git push heroku"
   },
   "dependencies": {
     "axios": "^0.21.0",
