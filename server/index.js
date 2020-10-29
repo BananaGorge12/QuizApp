@@ -18,9 +18,9 @@ const port = process.env.PORT || 3000
 require('./db/mongoose.js')
 
 //loads routes
-const userRoutes = require(path.join(__dirname,'./routes/user'))
+const userRoutes = require('./routes/user')
 app.use(userRoutes)
-const quizRoutes = require(path.join(__dirname,'./routes/quiz'))
+const quizRoutes = require('./routes/quiz')
 app.use(quizRoutes)
 
 
