@@ -60,6 +60,22 @@ export default {
   }
 }
 
+.u-ma-b{
+  margin-bottom: 20px;
+}
+
+.u-bold{
+  font-weight: 900 !important;
+}
+
+.u-loading{
+  cursor: progress;
+}
+
+.u-indent{
+  padding-left: 20px;
+}
+
 .u-pointer{
   cursor: pointer;
 }

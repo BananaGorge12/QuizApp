@@ -116,7 +116,6 @@ router.post('/api/quiz/:id/students', auth, async (req,res) => {
         quiz.students.push({
             name:student.name,
             email:student.email,
-            score:null,
             id:student._id,
         })
 
@@ -134,6 +133,7 @@ router.post('/api/quiz/:id/students', auth, async (req,res) => {
         res.send({
             name:student.name,
             email:student.email,
+            id:student._id,
             score:null
         })
     } catch (err) {
@@ -141,6 +141,64 @@ router.post('/api/quiz/:id/students', auth, async (req,res) => {
     }
 })
 
+
+router.delete('/api/quiz/:id/students',auth,async (req,res) => {
+    try {
+        const quiz = await Quiz.findOne({ _id:req.params.id, owner:req.user._id })
+        const student = await User.findById(req.query.sid)
+
+        if(!quiz){
+            throw new Error('No quiz found')
+        }
+
+        if(!student){
+            throw new Error('No student found')
+        }
+
+        //remove student from studets field
+        quiz.students = quiz.students.filter(student => student.id != req.query.sid)
+
+        //remove students answers from db
+        quiz.answers = quiz.answers.filter(answer => answer.email != student.email)
+        
+        //remove quiz from student's assigned quizzes
+        student.assignedQuizzes = student.assignedQuizzes.filter(assignedquiz => `${assignedquiz.id}` != `${quiz._id}`)
+
+        await quiz.save()
+        await student.save()
+
+        res.send(student)
+
+    } catch (err) {
+        res.status(400).send(`${err}`)
+    }
+})
+
+
+//saves quiz submit
+router.post('/api/quiz/:id/answer',auth,async (req,res) => {
+    try {
+        const quiz = await Quiz.findById(req.params.id)
+        
+        if(!quiz){
+            throw new Error('Quiz not found')
+        }
+
+        const studentAlreadyAnswers = quiz.answers.filter(answer => answer.email == req.user.email)
+
+        if(studentAlreadyAnswers.length > 0){
+            throw new Error('Student has already answered')
+        }
+
+        quiz.answers.push({...req.body})
+
+        await quiz.save()
+
+        res.send(quiz)
+    } catch (err) {
+        res.status(400 ).send(`${err}`)
+    }
+})
 
 
 module.exports = router

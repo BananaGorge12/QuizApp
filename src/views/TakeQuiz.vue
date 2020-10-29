@@ -1,5 +1,5 @@
 <template>
-    <v-app v-if="quiz" class="take-quiz">
+    <v-app v-if="quiz" class="take-quiz" :class="{'.u-loading':loading}">
         <h1 class="take-quiz__quiz-name">{{quiz.name}}</h1>
         <form @submit.prevent="turnInQuiz" action="#">
             <ul>
@@ -16,6 +16,7 @@
             <input class="take-quiz__btn" type="submit">
         </form>
         <h4 class="take-quiz__score" v-if="score">{{score}}</h4>
+        <p class="u-error-message" v-if="feedback">{{feedback}}</p>
     </v-app>
     <h1 v-else>loading</h1>
 </template>
@@ -27,8 +28,10 @@ export default {
         return{
             quiz:null,
             currentName:null,
+            feedback: null,
             finished:false,
             score:null,
+            loading:false,
         }
     },
     async created(){
@@ -44,8 +47,21 @@ export default {
             const score = this.checkQuiz()
             this.score = `${score}/100`
 
+            //stops function if user is owner
+            if(this.user._id == this.quiz.owner){return}
+
             //genarate results object
-            // const result = this.generateResultsObject(score)
+            const result = this.generateResultsObject(score)
+            
+            axios.post(`/api/quiz/${this.$route.params.id}/answer`,result,{
+                headers: {
+                  'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            }).then(res => {
+                console.log(res)
+            }).catch(err => {
+                this.feedback = err.response.data
+            })
         },
 
         generateResultsObject(score){
@@ -61,8 +77,7 @@ export default {
             this.quiz.questions.forEach(question => {
                 results.answers.push({
                     title:question.title,
-                    answers:question.selected,
-                    correctAnswer:this.getCorrectAnswer(question)
+                    answer:question.selected,
                 })
             })
             

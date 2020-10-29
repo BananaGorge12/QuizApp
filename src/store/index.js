@@ -22,7 +22,15 @@ export default new Vuex.Store({
   mutations: {
     //send data to state
     loadUserData: (state, payload) => (state.user = payload),
-    loadQuizzes: (state, payload) => (state.quizzes = payload)
+    loadQuizzes: (state, payload) => (state.quizzes = payload),
+    //remove quiz from state
+    removeQuiz(state,payload){
+      state.quizzes = state.quizzes.filter(quiz => quiz._id != payload)
+    },
+    //add quiz
+    addQuiz(sate,payload){
+      sate.quizzes.push(payload)
+    },
   },
   actions: {
     //get data from db
@@ -55,7 +63,5 @@ export default new Vuex.Store({
         })
       } return null
     }
-  },
-  modules: {
   }
 })

@@ -13,7 +13,8 @@ const quizSchema = mongoose.Schema({
         required:true,
         ref:'User',
     },
-    students:[]
+    students:[],
+    answers:[],
 })
 
 

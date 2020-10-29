@@ -4,7 +4,7 @@ const keys = require('../secret/keys')
 
 let url = null
 
-
+//switch between pord and dev
 if(os.hostname() == 'IlayBIgPc'){
     url = 'mongodb://127.0.0.1:27017/quiz-app'
 }else{

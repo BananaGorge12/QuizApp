@@ -113,7 +113,8 @@ export default {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-      }).then(() => {
+      }).then((res) => {
+          this.$store.commit('addQuiz',res.data)
           this.$router.push({name:'Home'})
       }).catch(err => {
           alert(`An error has happend :(. Message:${err}`)
