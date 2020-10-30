@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const os = require('os')
-const keys = require('../secret/keys')
+const keys = require('./keys')
 
 let uri = null
 
@@ -11,8 +11,7 @@ if(os.hostname() == 'IlayBIgPc'){
     uri = keys.mongodbKey
 }
 
-console.log(process.env.MONGODB_URI)
-
+uri = keys.mongodbKey
 
 //connects to db
 mongoose.connect(process.env.MONGODB_URI || uri,{

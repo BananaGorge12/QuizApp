@@ -105,4 +105,4 @@ typings/
 
 
 #secret folder
-# server/secret
+keys.js

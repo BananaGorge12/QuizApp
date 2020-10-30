@@ -16,7 +16,7 @@ router.post('/api/users/signup',async (req,res) => {
         //send
         res.status(201).send({user,token})
     } catch (err) {
-        res.sendStatus(500)
+        res.status(500).send(`${err}`)
     }
 })
 

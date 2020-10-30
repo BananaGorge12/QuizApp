@@ -24,21 +24,6 @@ const quizRoutes = require('./routes/quiz')
 app.use(quizRoutes)
 
 
-app.get('/api/test',(req,res) => {
-    res.send({ message:'Connection Works' })
-})
-
-
-
-//configre express to use the vue router
-const staticFileMiddleware = express.static(path.join(__dirname,'/dist'));
-app.use(staticFileMiddleware);
-app.use(history({
-  disableDotRule: true,
-  verbose: true
-}));
-app.use(staticFileMiddleware);
-
 
 app.listen(port,() => {
     console.log(`Runing on port ${port}`)
