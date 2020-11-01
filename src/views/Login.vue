@@ -78,7 +78,7 @@ export default {
           location.reload();
         })
         .catch((err) => {
-          console.log(err);
+          this.feedback = err.response.data.error;
         });
     },
   },

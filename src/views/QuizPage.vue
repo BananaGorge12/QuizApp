@@ -221,8 +221,7 @@ export default {
             this.popupFeedback = null
             this.formDialog = false
         }).catch(err => {
-            console.error(err.response.data)
-            this.popupFeedback = err.response.data
+            this.popupFeedback = err.response.data.error
             this.newStudentEmail = null
         })
       },

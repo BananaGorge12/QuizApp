@@ -11,12 +11,18 @@ router.post('/api/users/signup',async (req,res) => {
     try {
         const user = new User(req.body)
         await user.save()
+
         //new auth token
         const token = await user.generateAuthToken()
+
         //send
         res.status(201).send({user,token})
+
     } catch (err) {
-        res.status(500).send(`${err}`)
+        if(err.keyPattern.email){
+            return res.status(400).send('Email already taken')
+        }
+        res.status(500).send(err)
     }
 })
 
@@ -29,23 +35,23 @@ router.post('/api/users/login', async (req,res) => {
 
         //if user was not found
         if(!user){
-            throw new Error('Email or password are not correct.')
+            return res.status(400).send({error:'Email or password incorrect.'})
         }
 
         const isPasswordOk = await bcrypt.compare(req.body.password,user.password)
 
         //if password in correct
         if(!isPasswordOk){
-            throw new Error('Email or password are not correct.')
+            return res.status(400).send({error:'Email or password incorrect.'})
         }
 
         //new auth token
         const token = await user.generateAuthToken()
+
         //send
         res.send({ user, token })
     } catch (err) {
-        console.log(err)
-        res.status(400).send({ error:'Please make a vaild request' })
+        res.status(500).send('Server error') 
     }
 })
 
@@ -61,7 +67,7 @@ router.post('/api/users/logout',auth,async (req,res) => {
         res.send(req.user)
         
     } catch (err) {
-        res.status(500).send(err)
+        res.status(500).send('Server error')
     }
 })
 
@@ -71,30 +77,32 @@ router.get('/api/users/me',auth,(req,res) => {
     try {
         res.send(req.user)
     } catch (err) {
-        res.status(500).send(err)
+        res.status(500).send('Server error')
     }
 })
 
 
 //edit user
 router.patch('/api/users/me',auth, async (req,res) => {
-    //checks for invaild operations
-    const updates = Object.keys(req.body)
-    const allowedUpdate = ['name','email','password']
-    const isVaildOperation = updates.every(update => allowedUpdate.includes(update))
+    try{
 
-    if(!isVaildOperation){
-        return res.status(400).send({error:'invalid operation'})
-    }
+        //checks for invaild operations
+        const updates = Object.keys(req.body)
+        const allowedUpdate = ['name','email','password']
+        const isVaildOperation = updates.every(update => allowedUpdate.includes(update))
 
-    try {
+
+        if(!isVaildOperation){
+            return res.status(500).send({ error:'Unallowed changes' })
+        }
         
+
         updates.forEach(update => req.user[update] = req.body[update])
         await req.user.save()
 
         res.send(req.user)
     } catch (err) {
-        res.status(400).send({error:'invalid operation'})
+        res.status(500).send('Server error') 
     }
 })
 
@@ -103,6 +111,7 @@ router.patch('/api/users/me',auth, async (req,res) => {
 router.delete('/api/users/me',auth,async (req,res) => {
     try {
         await req.user.remove()
+        
         res.send(req.user)
     } catch (err) {
         res.status(500).send(err)

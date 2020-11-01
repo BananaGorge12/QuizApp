@@ -42,6 +42,12 @@ export default {
     methods:{
         validiteUser(){
             let isUserAllowed = false
+            
+            //if owner tries to take the test
+            if(this.user._id == this.quiz.owner){
+                return isUserAllowed = true
+            }
+
             this.quiz.students.forEach(student => {
                 if(student.id == this.user._id){
                     isUserAllowed = true

@@ -65,7 +65,7 @@ export default {
           location.reload()
         })
         .catch((err) => {
-          this.feedback = err;
+          this.feedback = err.response.data;
         });
     },
   },

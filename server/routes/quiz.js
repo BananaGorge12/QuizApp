@@ -13,10 +13,11 @@ router.post('/api/quiz',auth,async (req,res) => {
             ...req.body,
             owner:req.user._id
         })
+
         await quiz.save()
         res.status(201).send(quiz)
     } catch (err) {
-        res.status(500).send(err)
+        res.status(500).send('Unable to create a new Quiz')
     }
 })
 
@@ -25,15 +26,15 @@ router.post('/api/quiz',auth,async (req,res) => {
 router.delete('/api/quiz/:id',auth,async (req,res) => {
     try {
         const quiz = await Quiz.findOneAndRemove({ _id:req.params.id, owner:req.user._id })
-        // const quiz = await Quiz.findOne({ _id:req.params.id, owner:req.user._id })
 
         if(!quiz){
-            throw new Error('Quiz was not found')
+            return res.status(404).send({ error:'Quiz was not found' })
         }
 
         //deleted the quiz from users
         quiz.students.forEach(async student => {
             student = await User.findById(student.id)
+
             student.assignedQuizzes = student.assignedQuizzes.filter(assignedquiz => `${assignedquiz.id}` != `${quiz._id}`)
 
             await student.save()
@@ -41,7 +42,7 @@ router.delete('/api/quiz/:id',auth,async (req,res) => {
         
         res.send(quiz)
     } catch (err) {
-        res.status(500).send(`${err}`)
+        res.status(500).send('Server error') 
     }
 })
 
@@ -50,9 +51,14 @@ router.delete('/api/quiz/:id',auth,async (req,res) => {
 router.get('/api/quiz',auth,async (req,res) => {
     try {
         const quizzes = await Quiz.find({owner:req.user._id})
+
+        if(!quizzes){
+            return res.status(404).send({ error:'Unable to find quizzes' })
+        }
+
         res.send(quizzes)
     } catch (err) {
-        res.status(500).send(err)
+        res.status(500).send('Server error') 
     }
 })
 
@@ -62,9 +68,13 @@ router.get('/api/quiz/:id',async (req,res) => {
     try {
        const quiz = await Quiz.findById(req.params.id)
        
+       if(!quiz){
+           return res.status(404).send({ error:'Unable to find quiz' })
+       }
+
        res.send(quiz)
     } catch (err) {
-        res.status(404).send({ error:'no quiz found' })
+        res.status(500).send('Server error') 
     }
 })
 
@@ -74,6 +84,10 @@ router.patch('/api/quiz/:id',auth,async (req,res) => {
     try {
         const quiz = await Quiz.findOne({ owner:req.user._id, _id:req.params.id })
 
+        if(!quiz){
+            return res.status(404).send({ error:'Unable to find quiz' })
+        }
+
         quiz.name = req.body.name
         quiz.questions = req.body.questions
 
@@ -82,7 +96,7 @@ router.patch('/api/quiz/:id',auth,async (req,res) => {
         res.send(quiz)
 
     } catch (err) {
-        res.status(404).send({ error:'no quiz found' })
+        res.status(500).send('Server error') 
     }
 })
 
@@ -94,22 +108,22 @@ router.post('/api/quiz/:id/students', auth, async (req,res) => {
         const student = await User.findOne({ email:req.body.email })
 
         if(!quiz){
-            throw new Error('Cannot find quiz')
+            return res.status(404).send({ error:'Cannot find quiz' })
         }
 
         if(!student){
-            throw new Error('Cannot find student')
+            return res.status(404).send({ error:'Cannot find student' })
         }
 
         //checks if owner is trying to add them self
         if(req.user.email === student.email){
-            throw new Error('You cannot add your self.')
+            return res.status(400).send({ error:'You cannot add yourself.' })
         }
 
         //checks if user has already been assigned
         const isUserAlreadyAssigned = student.assignedQuizzes.filter(assignedquiz => assignedquiz.id != quiz._id)
         if(isUserAlreadyAssigned.length > 0){
-            throw new Error('Student has already been assigned to this quiz.')
+            return res.status(400).send({ error:'Student has already been assigned to this quiz.' })
         }
 
         //adds a student to quiz
@@ -137,7 +151,7 @@ router.post('/api/quiz/:id/students', auth, async (req,res) => {
             score:null
         })
     } catch (err) {
-        res.status(400).send(`${err}`)    
+        res.status(500).send('Server error')  
     }
 })
 
@@ -148,11 +162,11 @@ router.delete('/api/quiz/:id/students',auth,async (req,res) => {
         const student = await User.findById(req.query.sid)
 
         if(!quiz){
-            throw new Error('No quiz found')
+            return res.status(404).send({ error:'No quiz found' })
         }
 
         if(!student){
-            throw new Error('No student found')
+            return res.status(404).send({ error:'No student found' })
         }
 
         //remove student from studets field
@@ -170,7 +184,7 @@ router.delete('/api/quiz/:id/students',auth,async (req,res) => {
         res.send(student)
 
     } catch (err) {
-        res.status(400).send(`${err}`)
+        res.status(500).send('Server error')  
     }
 })
 
@@ -181,13 +195,13 @@ router.post('/api/quiz/:id/answer',auth,async (req,res) => {
         const quiz = await Quiz.findById(req.params.id)
         
         if(!quiz){
-            throw new Error('Quiz not found')
+            return res.status(404).send({ error:'Quiz not found' })
         }
 
         const studentAlreadyAnswers = quiz.answers.filter(answer => answer.email == req.user.email)
 
         if(studentAlreadyAnswers.length > 0){
-            throw new Error('Student has already answered')
+            return res.status(400).send({ error:'Student has already answered' })
         }
 
         quiz.answers.push({...req.body})
@@ -196,7 +210,7 @@ router.post('/api/quiz/:id/answer',auth,async (req,res) => {
 
         res.send(quiz)
     } catch (err) {
-        res.status(400 ).send(`${err}`)
+        res.status(500).send('Server error')  
     }
 })
 

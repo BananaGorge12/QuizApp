@@ -11,10 +11,8 @@ if(os.hostname() == 'IlayBIgPc'){
     uri = keys.mongodbKey
 }
 
-uri = keys.mongodbKey
-
 //connects to db
-mongoose.connect(process.env.MONGODB_URI || uri,{
+mongoose.connect(uri,{
     useNewUrlParser:true,
     useCreateIndex:true,
     useUnifiedTopology:true,
