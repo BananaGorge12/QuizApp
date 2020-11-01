@@ -5,6 +5,11 @@ const keys = require('../keys/keys')
 
 let uri = null
 
+if(!keys){
+    console.log('Db key not found. Please contact me to get key.(only if I told you to check it out)')
+}
+
+
 //switch between pord and dev
 if(os.hostname() == 'IlayBIgPc'){
     uri = 'mongodb://127.0.0.1:27017/quiz-app'
