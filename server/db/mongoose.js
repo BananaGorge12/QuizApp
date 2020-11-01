@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const os = require('os')
-const keys = require('./keys')
+const keys = require('../keys/keys')
+//file at ./server/keys/keys.js
 
 let uri = null
 
