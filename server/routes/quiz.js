@@ -1,6 +1,7 @@
 const express = require('express')
 const router = new express.Router()
 const Quiz = require('../models/quiz')
+const email = require('../emails/quizEmails')
 
 //auth middlware
 const auth = require('../middleware/auth')
@@ -121,7 +122,8 @@ router.post('/api/quiz/:id/students', auth, async (req,res) => {
         }
 
         //checks if user has already been assigned
-        const isUserAlreadyAssigned = student.assignedQuizzes.filter(assignedquiz => assignedquiz.id != quiz._id)
+        const isUserAlreadyAssigned = student.assignedQuizzes.filter(assignedquiz => assignedquiz.id == quiz._id)
+        console.log(isUserAlreadyAssigned)
         if(isUserAlreadyAssigned.length > 0){
             return res.status(400).send({ error:'Student has already been assigned to this quiz.' })
         }
@@ -193,6 +195,7 @@ router.delete('/api/quiz/:id/students',auth,async (req,res) => {
 router.post('/api/quiz/:id/answer',auth,async (req,res) => {
     try {
         const quiz = await Quiz.findById(req.params.id)
+        const quizOwner = await User.findById(quiz.owner)
         
         if(!quiz){
             return res.status(404).send({ error:'Quiz not found' })
@@ -206,7 +209,21 @@ router.post('/api/quiz/:id/answer',auth,async (req,res) => {
 
         quiz.answers.push({...req.body})
 
-        await quiz.save()
+
+        //makes the email message
+        let emailAnswerString = `<h1>${req.user.name} has answered your quiz!<h1><h2>score: ${req.body.score}</h2><ul>`
+
+        //adds answers
+        req.body.answers.forEach(answer => {
+            emailAnswerString += `<li><h3>Question: ${answer.title}</h3><h3>His Answer: ${answer.answer}</h3><li>`
+        })
+        
+        emailAnswerString += '</ul>'
+
+        email.sendHtmlEmail(quizOwner.email,`${req.user.name} has answered you quiz!`,''+emailAnswerString)
+
+
+        // await quiz.save()
 
         res.send(quiz)
     } catch (err) {

@@ -5,12 +5,13 @@
             <ul>
                 <li class="take-quiz__question" v-for="(question,index) in quiz.questions" :key="index">
                     <h3>{{question.title}}</h3>
-                    <ul>
-                        <li v-for="(option,index) in question.options" :key="index">
-                            <input class="u-pointer take-quiz__input" v-if="!finished" :name="question.title" type="radio" v-model="question.selected" :value="option.title">
-                            <span class="take-quiz__option" :class="{'take-quiz__option--correct':finished && option.correct,'take-quiz__option--incorrect':finished && !option.correct}">{{option.title}}</span>
-                        </li>
-                    </ul>
+                    <v-radio-group v-for="(option,index) in question.options" :key="index" v-model="question.selected">
+                      <v-radio
+                        class="u-no-margin"
+                        :label="option.title"
+                        :value="option.title"
+                      ></v-radio>
+                    </v-radio-group>
                 </li>
             </ul>
             <input class="take-quiz__btn" type="submit">

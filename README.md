@@ -5,10 +5,19 @@
 npm install
 ```
 
+### Runs a loacal backend server for development
+```
+npm run server
+```
+
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+npm run dev
 ```
+
+### Run the production server
+npm run start
+
 
 ### Compiles and minifies for production
 ```

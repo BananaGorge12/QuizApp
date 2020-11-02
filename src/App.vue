@@ -79,4 +79,9 @@ export default {
 .u-pointer{
   cursor: pointer;
 }
+
+.u-no-margin{
+  margin: 0 !important;
+}
+
 </style>
