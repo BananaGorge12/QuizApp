@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <NavBar />
+    <Navigation />
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import NavBar from "./components/NavBar";
+import Navigation from "./components/Navigation";
 export default {
   name: "App",
   components: {
-    NavBar,
+    Navigation,
   },
   data() {
     return {};
@@ -38,6 +38,13 @@ export default {
 };
 </script>
 <style lang="scss">
+@import url('./sass/header.scss');
+@import "./sass/form";
+
+#app{
+  position: relative;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -68,6 +75,10 @@ export default {
   font-weight: 900 !important;
 }
 
+.u-f40{
+  font-size: 4rem !important;
+}
+
 .u-loading{
   cursor: progress;
 }
@@ -83,5 +94,17 @@ export default {
 .u-no-margin{
   margin: 0 !important;
 }
+
+//fonts
+@font-face {
+  font-family: 'wendy one';
+  src: url('./fonts/WendyOne-Regular.ttf');
+}
+
+@font-face {
+  font-family: roboto;
+  src: url('./fonts/Roboto-Regular.ttf');
+}
+
 
 </style>

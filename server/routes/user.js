@@ -35,14 +35,14 @@ router.post('/api/users/login', async (req,res) => {
 
         //if user was not found
         if(!user){
-            return res.status(400).send({error:'Email or password incorrect.'})
+            return res.status(400).send({error:'Email or password are incorrect.'})
         }
 
         const isPasswordOk = await bcrypt.compare(req.body.password,user.password)
 
         //if password in correct
         if(!isPasswordOk){
-            return res.status(400).send({error:'Email or password incorrect.'})
+            return res.status(400).send({error:'Email or password are incorrect.'})
         }
 
         //new auth token

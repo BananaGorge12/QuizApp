@@ -223,7 +223,7 @@ router.post('/api/quiz/:id/answer',auth,async (req,res) => {
         email.sendHtmlEmail(quizOwner.email,`${req.user.name} has answered you quiz!`,''+emailAnswerString)
 
 
-        // await quiz.save()
+        await quiz.save()
 
         res.send(quiz)
     } catch (err) {

@@ -1,29 +1,31 @@
 <template>
-  <v-app class="signup">
-    <h1>Signup</h1>
-    <v-form class="signup__form">
-      <v-text-field v-model="name" label="Name" required></v-text-field>
-
-      <v-text-field
-        v-model="email"
-        label="E-mail"
-      ></v-text-field>
-
-      <v-text-field
-        v-model="password"
-        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="show1 ? 'text' : 'password'"
-        name="input-10-1"
-        label="Password"
-        counter
-        @click:append="show1 = !show1"
-      ></v-text-field>
-
-      <v-btn @click="signup" color="blue">Signup!</v-btn>
-
-      <p class="body-2 u-error-message" v-if="feedback">{{ feedback }}</p>
-    </v-form>
-  </v-app>
+  <div class="signup">
+    <header class="header">
+      <h1 class="header__title">Signup</h1>
+    </header>
+    <main>
+      <form action="#" @submit.prevent="signup" class="form">
+        <div class="form__field">
+          <input v-model="name" placeholder=" " id="signup-form-name" type="name" class="form__text">
+          <label class="label" for="signup-form-name">Name</label>
+        </div>
+        <div class="form__field">
+          <input v-model="email" placeholder=" " id="signup-form-email" type="email" class="form__text">
+          <label for="signup-form-email">Email</label>
+        </div>
+        <div class="form__field">
+          <input v-model="password" placeholder=" " id="signup-form-password" type="password" class="form__text">
+          <label for="signup-form-password">Password</label>
+        </div>
+        <div class="form__field">
+          <input v-model="passwordV" placeholder=" " id="signup-form-password2" type="password" class="form__text">
+          <label for="signup-form-password2">Password</label>
+        </div>
+        <button class="form__btn">Sign Up</button>
+        <p v-if="feedback" class="form__feedback">{{ feedback }}</p>
+      </form>
+    </main>
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -31,24 +33,23 @@ export default {
   name: "Signup",
   data() {
     return {
-      show1: false,
-      feedback: null,
-      email: null,
-      password: null,
-      name: null,
-      conut: 5,
-      //vuetifiy rules
-      rules: {
-        required: (value) => !!value || "Required.",
-        emailMatch: () => `The email and password you entered don't match`,
-      },
+      name:null,
+      email:null,
+      password:null,
+      passwordV:null,
+      feedback:null,
     };
   },
   methods: {
     signup() {
-      if (!this.name || !this.email || !this.password) {
-        return (this.feedback = "Please Fill Out All Fields.");
+      if (!this.name || !this.email || !this.password || !this.passwordV) {
+        return this.feedback = "Please Fill Out All Fields."
       }
+
+      if(this.password != this.passwordV){
+        return this.feedback = "Password Fields Don't Match"
+      }
+
       //resets feedback
       this.feedback = null;
 
@@ -92,15 +93,5 @@ export default {
 };
 </script>
 <style lang="scss">
-.signup {
-  width: 50%;
-  margin: 0 auto;
-  text-align: center;
-  margin-top: 60px;
 
-  &__form {
-    width: 50%;
-    margin: 50px auto;
-  }
-}
 </style>

@@ -1,0 +1,88 @@
+.form{
+    font-family: 'wendy one';
+    width: 70%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    align-items: center;
+    text-align: left;
+    font-size: 1.9rem;
+
+    &__field{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__field:focus-within::after{
+        transform: scaleX(1);
+    }
+
+    &__text{
+        border-bottom: .2rem solid;
+        margin-bottom: 3rem;
+        width: 100%;
+        outline: none;
+    }
+
+    &__text:not(:placeholder-shown) + label, &__field:focus-within label{
+        transform: translateY(-2rem);
+        color: #c7c7c7;
+        font-size: 1.4rem;
+        width: 100%;
+        cursor: auto;
+    }
+
+    &__field::after{
+        content: "";
+        width: 100%;
+        background-color: #5FAEFF;
+        height: .4rem;
+        z-index: 1000;
+        top: -3.4rem;
+        position: relative;
+        display: block;
+        transform: scaleX(0);
+        transition: all .2s;
+    }
+
+    label{
+        width: 100%;
+        position: absolute;
+        transform: translateY(0);
+        transition: all .2s;
+        cursor: text;
+
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    &__btn{
+        background-color: #4493FE;
+        padding: .3rem 2rem;
+        color: #ffffff;
+        border-radius: .4rem;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        transition: all .2s;
+        outline: none;
+        margin-bottom: 2rem;
+
+        &:hover,:focus{
+            transform: translateY(-.3rem);
+        }
+
+        &:active{
+            transform: translateY(-.1rem);
+        }
+    }
+
+    &__feedback{
+        color: #FF1744;
+        font-size: 1.2rem;
+    }
+}

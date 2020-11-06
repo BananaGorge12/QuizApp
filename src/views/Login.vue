@@ -1,24 +1,23 @@
 <template>
-  <v-app class="login">
-    <h1>Login</h1>
-    <v-form class="login__form">
-      <v-text-field v-model="email" label="E-mail" required></v-text-field>
-
-      <v-text-field
-        v-model="password"
-        :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="show1 ? 'text' : 'password'"
-        name="input-10-1"
-        label="Password"
-        counter
-        @click:append="show1 = !show1"
-      ></v-text-field>
-
-      <v-btn @click="login" color="blue">login!</v-btn>
-
-      <p class="body-2 u-error-message" v-if="feedback">{{ feedback }}</p>
-    </v-form>
-  </v-app>
+  <div class="login">
+    <header class="header">
+      <h1 class="header__title">Login</h1>
+    </header>
+    <main>
+      <form action="#" @submit.prevent="login" class="form">
+        <div class="form__field">
+          <input v-model="email" placeholder=" " id="login-form-email" type="email" class="form__text">
+          <label for="login-form-email">Email</label>
+        </div>
+        <div class="form__field">
+          <input v-model="password" placeholder=" " id="login-form-password" type="password" class="form__text">
+          <label for="login-form-password">Password</label>
+        </div>
+        <button class="form__btn">Login</button>
+        <p v-if="feedback" class="form__feedback">{{ feedback }}</p>
+      </form>
+    </main>
+  </div>
 </template>
 
 
@@ -28,20 +27,9 @@ export default {
   name: "Login",
   data() {
     return {
-      show1: false,
       email: null,
       password: null,
-      conut: 5,
-      feedback: null,
-      //vuetifiy rules
-      emailRules: [
-        (v) => !!v || "E-mail is required",
-        (v) => /.+@.+/.test(v) || "E-mail must be valid",
-      ],
-      rules: {
-        required: (value) => !!value || "Required.",
-        emailMatch: () => `The email and password you entered don't match`,
-      },
+      feedback:null,
     };
   },
   created() {
@@ -90,15 +78,5 @@ export default {
 };
 </script>
 <style lang="scss">
-.login {
-  width: 50%;
-  margin: 0 auto;
-  text-align: center;
-  margin-top: 60px;
 
-  &__form {
-    width: 50%;
-    margin: 50px auto;
-  }
-}
 </style>
