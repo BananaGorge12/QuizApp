@@ -70,8 +70,8 @@ export default {
     };
   },
   created() {
-    if (!localStorage.getItem("token")) {
-      this.$router.push({ name: "Home" });
+    if(!this.user){
+      return this.$router.push({ name:'Home' })
     }
 
     //waits for data to come
@@ -137,6 +137,9 @@ export default {
   computed:{
       storeQuizzes(){
           return this.$store.state.quizzes
+      },
+      user(){
+        return this.$store.state.user
       }
   }
 };

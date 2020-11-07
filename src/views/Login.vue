@@ -33,19 +33,9 @@ export default {
     };
   },
   created() {
-    let timesLooped = 0
-    const loop = setInterval(() => {
-      if (this.user) {
-        clearInterval(loop)
-        this.$router.push({ name: "Home" });
-      }
-
-      else if(timesLooped > 100){
-        clearInterval(loop)
-      }
-
-      timesLooped++
-    }, 100);
+    if(this.user){
+      return this.$router.push({ name:'Home' })
+    }
   },
   methods: {
     login() {
@@ -73,7 +63,7 @@ export default {
   computed: {
     user() {
       return this.$store.state.user;
-    },
+    }
   },
 };
 </script>

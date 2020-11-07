@@ -1,61 +1,22 @@
 <template>
-  <v-app class="new-quiz">
-    <h1>Quiz Maker</h1>
-    <h2><input type="text" class="new-quiz__quiz-name" v-model="quizName"></h2>
-    <ul>
-      <li
-        v-for="(question, index) in questions"
-        :key="index"
-        class="new-quiz__question"
-      >
-        <v-icon @click="deleteQuestion(index)" >mdi-trash-can</v-icon>
-        <h3>
-          <input
-            class="new-quiz__title-input"
-            type="text"
-            v-model="question.title"
-          />
-        </h3>
-        <ol>
-          <li v-for="(option, index) in question.options" :key="index">
-            <input
-              type="text"
-              :class="{
-                'new-quiz__input--green': option.correct,
-                'new-quiz__input--red': !option.correct,
-              }"
-              class="new-quiz__input"
-              v-model="option.title"
-            />
-            <v-icon
-              class="new-quiz__correct-btn"
-              @click="option.correct = false"
-              v-if="option.correct"
-              color="green"
-              >mdi-checkbox-marked-circle</v-icon
-            >
-            <v-icon
-              class="new-quiz__correct-btn"
-              @click="option.correct = true"
-              v-else
-              color="red"
-              >mdi-checkbox-marked-circle</v-icon
-            >
-          </li>
-        </ol>
-      </li>
-    </ul>
-    <v-btn @click="addNewQuestion" class="new-quiz__btn" color="blue"
-      >New Question</v-btn
-    >
-    <v-btn
-      @click="saveQuiz"
-      class="new-quiz__btn"
-      color="green"
-      v-if="questions.length > 0"
-      >Save</v-btn
-    >
-  </v-app>
+  <div class="quiz-maker">
+    <header class="header">
+      <h1 class="header__title u-f40">THE QUIZ MAKER!</h1>
+    </header>
+    <form @submit.prevent class="quiz-main quiz-maker-main">
+      <ul>
+        <li v-for="(question,index) in questions" :key="index">
+          <input v-bind="question.title" class="quiz-maker-main__question-title">
+          <ul class="quiz-main__list u-indent">
+            <li v-for="(option,index) in question.options" :key="index">
+              <input class="quiz-maker-main__question-option" type="text">
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </form>
+    <button class="quiz-maker__nq-btn" @click="addNewQuestion">+</button>
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -63,14 +24,36 @@ export default {
   name: "newQuiz",
   data() {
     return {
-      questions: [],
+      questions: [
+        {
+          title: `Question 1`,
+          options: [
+            {
+              title: "Option 1",
+              correct: true,
+            },
+            {
+              title: "Option 2",
+              correct: false,
+            },
+            {
+              title: "Option 3",
+              correct: false,
+            },
+            {
+              title: "Option 4",
+              correct: false,
+            },
+          ],
+        }
+      ],
       quizName:'New Quiz'
     };
   },
   created() {
-      if(!localStorage.getItem('token')){
-          this.$router.push({name:'Home'})
-      }
+    if(!this.user){
+      return this.$router.push({ name:'Home' })
+    }
   },
   methods: {
     deleteQuestion(questionIndex){
@@ -121,67 +104,73 @@ export default {
       })
     },
   },
+  computed:{
+    user(){
+      return this.$store.state.user
+    }
+  }
 };
 </script>
 <style lang="scss">
-.new-quiz {
-  width: 70%;
-  margin: 0 auto;
+  .quiz-maker{
 
-  ul {
-    list-style: square;
-  }
+    &-main{
+      font-size: 2rem;
 
-  * {
-    margin: 0 auto;
-  }
+      &__question-title{
+        border-bottom: 1px solid;
+        outline: none;
+        transition: all .2s;
+        margin-bottom: 1rem;
 
-  h1,h2{
-    margin-bottom: 20px;
-  }
+        &:focus{
+          border-bottom: 2px solid #248CEC;
+        }
+      }
 
-  &__quiz-name{
-    text-align: center;
-  }
+      &__question-option{
+        text-align: left;
+        margin-bottom: 1rem;
+        outline: none;
+        border-bottom: 2px solid;
+        box-sizing: border-box;
+        transition: all .2s;
 
-  &__btn {
-    margin: 50px auto 0;
-    width: 50%;
-  }
-
-  &__input {
-    outline: none;
-    transition: all 0.2s linear;
-    margin-bottom: 10px;
-    width: 400px;
-
-    &--green {
-      border-bottom: 3px solid #00e676;
+        &:focus{
+          border-bottom: 2px solid #248CEC;
+        }
+      }
     }
 
-    &--red {
-      border-bottom: 3px solid #ff1744;
+    &__nq-btn{
+      background-color: #248CEC;
+      height: 5rem;
+      width: 5rem;
+      color: #ffffff;
+      border-radius: 50%;
+      font-size: 5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      outline: none;
+      position: fixed;
+      top: 85%;
+      right: 3%;
+      transition: all .2s;
+      transform: translateY(0);
+      box-shadow: 3px 5px 4px rgba(0, 0, 0, 0.25);
+
+      &:hover,:focus{
+        background-color: darken(#248CEC,5);
+        transform: translateY(-.6rem);
+        box-shadow: 4px 5px 4px rgba(0, 0, 0, 0.25);
+      }
+
+      &:active{
+        background-color: darken(#248CEC,10);
+        transform: translateY(-.3rem);
+        box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.25);
+      }
     }
   }
-
-  &__title-input {
-    margin-bottom: 20px;
-    outline: none;
-    box-sizing: border-box;
-    &:focus {
-      border: solid 2px #2196f3;
-      border-radius: 30px;
-    }
-  }
-
-  &__question {
-    &:not(:last-child) {
-      margin-bottom: 25px;
-    }
-  }
-
-  &__correct-btn {
-    cursor: pointer;
-  }
-}
 </style>

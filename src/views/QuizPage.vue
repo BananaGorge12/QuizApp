@@ -113,10 +113,6 @@ export default {
       ]
     };
   },
-  async created() {
-    await this.getQuizzesData()
-    // this.setStudentsScore()
-  },
   methods: {
       //sets user score
       setStudentsScore(){
@@ -225,38 +221,6 @@ export default {
             this.newStudentEmail = null
         })
       },
-      getQuizzesData(){
-        return new Promise((resolve) => {
-          let timesLooped = 0
-          //waits for data to come
-          const checkForData = setInterval(() => {
-            if (this.storeQuizzes) {
-
-                this.quiz = this.storeQuizzes;
-
-                //gets correct quiz to edit
-                this.quiz = this.quiz.filter(quiz => quiz._id == this.$route.params.id)
-                this.quiz = this.quiz[0]
-
-                //adds students to table
-                this.quiz.students.forEach(student => {
-                  this.students.push(student)
-                })
-
-                this.setStudentsScore()
-
-                clearInterval(checkForData);
-                resolve()
-            }
-
-            if(timesLooped > 100){
-                this.$router.push({ name: "Home" });
-            }
-
-            timesLooped++
-          }, 100);
-        })
-      }
   },
   computed:{
       storeQuizzes(){

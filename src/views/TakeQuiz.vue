@@ -36,7 +36,6 @@ export default {
         }
     },
     async created(){
-        await this.loadUser()
         await this.loadQuiz()
         this.validiteUser()
     },
@@ -126,21 +125,6 @@ export default {
             }).catch(err => {
                 console.error(err)
             })
-        },
-
-        loadUser(){
-            let timesLooped = 0
-            const loop = setInterval(() => {
-                if (this.user) {
-                    clearInterval(loop)
-                }
-
-                else if(timesLooped > 100){
-                    clearInterval(loop)
-                    this.$router.push({ name: "Home" });
-                }
-                    timesLooped++
-            }, 100);
         },
         getCorrectAnswer(question){
             const correctAnswer = question.options.filter(option => option.correct)

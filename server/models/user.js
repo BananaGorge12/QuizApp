@@ -65,6 +65,16 @@ userSchema.methods.generateAuthToken = async function(){
     return token
 }
 
+//deletes private data before sending to user
+userSchema.methods.toJSON = function() {
+    const userObject = this.toObject()
+
+    delete userObject.password
+    delete userObject.tokens
+
+    return userObject
+}
+
 const User = mongoose.model('User',userSchema) 
 
 //exports it
