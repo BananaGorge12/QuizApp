@@ -1,6 +1,5 @@
 const express = require('express')
 const path = require('path')
-const history = require('connect-history-api-fallback')
 
 
 //start express
@@ -23,6 +22,15 @@ app.use(userRoutes)
 const quizRoutes = require('./routes/quiz')
 app.use(quizRoutes)
 
+
+
+
+app.use(express.static(__dirname + '/dist/'))
+
+//handel SPA
+app.get(/.*/, (req,res) => {
+    res.sendFile(__dirname + '/dist/index.html')
+})
 
 
 app.listen(port,() => {

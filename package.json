@@ -15,7 +15,8 @@
     "git:push": "git push origin master",
     "heroku:commit": "git commit -m\"deploy\"",
     "heroku:push": "git push heroku master",
-    "deploy": "npm-run-all git:add heroku:commit heroku:push"
+    "deploy": "npm-run-all git:add heroku:commit heroku:push",
+    "master":"npm-run-all build git:add heroku:commit git:push heroku:push"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.3.0",
