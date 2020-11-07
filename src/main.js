@@ -7,45 +7,54 @@ import axios from 'axios'
 
 Vue.config.productionTip = false
 
-
-//gets user data before load
-axios.get('/api/users/me', {
-  headers: {
-    'Authorization': `Bearer ${localStorage.getItem('token')}`
-  }
-}).then(res => {
-  //updates store
-  store.commit('loadUserData', res.data)
-
-  axios.get('/api/quiz',{
-    headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    }
-  }).then(res => {
-    //updates store
-    store.commit('loadQuizzes',res.data)
-
-    //render app
-    new Vue({
-      router,
-      store,
-      // vuetify,
-      render: h => h(App)
-    }).$mount('#app')
-
-  }).catch(err => {
-    console.error(err)
-  })
-
-}).catch(err => {
-  console.error(err)
-
-  //render app
+const loadVue = () => {
+  //renders app
   new Vue({
     router,
     store,
-    // vuetify,
     render: h => h(App)
   }).$mount('#app')
+}
 
-})
+
+//loads user data to store if has token
+if(localStorage.getItem('token')){
+  
+  //gets user data before load
+  const getData = async () => {
+    try {
+      //gets user
+      const user = await axios.get('/api/users/me', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+
+      //puts user on store
+      store.commit('loadUserData', user.data)
+
+      //gets quizzes
+      const quizzes = await axios.get('/api/quiz',{
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+
+      //puts quizzes in store
+      store.commit('loadQuizzes',quizzes.data)
+
+      //loads vue
+      loadVue()
+
+    } catch {
+      //loads vue
+      loadVue()
+    }
+  }
+
+  getData()
+
+}else{
+  //loads vue
+  loadVue()
+}

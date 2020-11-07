@@ -40,24 +40,6 @@ export default {
   methods:{
     goToQuizPage(id){this.$router.push({name:'quizPage',params:{id}})},
     goToAssignedQuiz(id){this.$router.push({name:'takeQuiz',params:{id}})},
-    loadData(){
-      return new Promise((resolve) => {
-        const checkForData = setInterval(() => {
-          if (this.storeQuizzes) {
-            this.Myquizzes = this.storeQuizzes;
-          }
-          if(this.user && this.storeQuizzes){
-            resolve()
-            clearInterval(checkForData);
-        }
-      }, 100);
-      })
-    }
-  },
-  async created() {
-    //waits for data to come
-    await this.loadData()
-
   },
   computed: {
     storeQuizzes() {
@@ -72,7 +54,6 @@ export default {
 <style lang="scss">
 .home-main{
   display: flex;
-  // justify-content: space-around;
   flex-wrap: wrap;
 
   &__card{

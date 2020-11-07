@@ -17,13 +17,13 @@
 export default {
     name:'wellcome',
     data(){
-        
+        return{
+            
+        }
     }
 }
 </script>
 <style lang="scss">
-@import url('../animations/slide-from-top.scss');
-@import url('../animations/fade-in.scss');
 .wellcome{
     font-family: 'wendy one';
     letter-spacing: .22rem;

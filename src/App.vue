@@ -18,9 +18,11 @@ export default {
 };
 </script>
 <style lang="scss">
-@import url('./sass/header.scss');
+@import './sass/header';
 @import "./sass/form";
 @import "./sass/quiz";
+@import "./sass/animations";
+@import './sass/fonts';
 
 #app{
   position: relative;
@@ -56,17 +58,4 @@ button{
 .u-no-margin{
   margin: 0 !important;
 }
-
-//fonts
-@font-face {
-  font-family: 'wendy one';
-  src: url('./fonts/WendyOne-Regular.ttf');
-}
-
-@font-face {
-  font-family: roboto;
-  src: url('./fonts/Roboto-Regular.ttf');
-}
-
-
 </style>
