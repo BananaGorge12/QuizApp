@@ -1,46 +1,24 @@
 <template>
-  <v-app class="profile container">
-    <h1>Profile</h1>
-
-    <h3 class="h3">Name:</h3>
-    <p v-if="!edit" class="subtitle-1">{{ name }}</p>
-    <input class="profile__input" v-model="name" v-else />
-
-    <h3 class="h3">Email:</h3>
-    <p v-if="!edit" class="subtitle-1">{{ email }}</p>
-    <input class="profile__input" v-model="email" v-else />
-
-    <h3 v-if="edit" class="h3">New Password:</h3>
-    <input v-if="edit" v-model="password" class="profile__input" />
-
-    <v-btn
-      v-if="!edit"
-      class="profile__btn"
-      elevation="2"
-      color="green accent-3"
-      width="100"
-      @click="edit = true"
-      >Edit</v-btn
-    >
-    <v-btn
-      v-else
-      class="profile__btn"
-      elevation="2"
-      color="red accent-4"
-      width="100"
-      @click="edit = false"
-      >Cancel</v-btn
-    >
-    <v-btn
-      v-if="edit"
-      class="profile__btn"
-      elevation="2"
-      color="blue"
-      width="100"
-      @click="updateUser"
-      >Save</v-btn
-    >
-  </v-app>
+  <div class="profile">
+    <header class="header">
+      <h1 class="header__title">Profile</h1>
+    </header>
+    <form @submit.prevent="updateUser" class="form">
+      <div class="form__field">
+        <input v-model="name" class="form__text" id="profile-name" type="name">
+        <label for="profile-name">Name</label>
+      </div>
+      <div class="form__field">
+        <input v-model="email" class="form__text" id="profile-email" type="name">
+        <label for="profile-email">Email</label>
+      </div>
+      <div class="form__field">
+        <input v-model="password" class="form__text" id="profile-password" type="name">
+        <label for="profile-password">Password</label>
+      </div>
+      <button class="form__btn">Save</button>
+    </form>
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -50,7 +28,7 @@ export default {
     return {
       edit: false,
       name: null,
-      email: null,
+      email:null,
       password: null,
     };
   },
@@ -75,21 +53,16 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+      
+      location.reload()
     },
   },
   created() {
     if(!this.user){
       return this.$router.push({ name:'Home' })
     }
-    
-    //waits for valid user data
-    const checkForUser = setInterval(() => {
-      if(this.user){
-        this.name = this.user.name
-        this.email = this.user.email
-        clearInterval(checkForUser)
-      }
-    },100)
+    this.name = this.user.name
+    this.email = this.user.email
   },
   computed: {
     user() {
@@ -99,30 +72,4 @@ export default {
 };
 </script>
 <style lang="scss">
-.profile {
-  width: 50%;
-  margin: 0 auto;
-
-  h1 {
-    margin-bottom: 10px;
-  }
-
-  &__input {
-    border-bottom: 3px solid #1976d2;
-    outline: none;
-    transition: all 0.2s linear;
-    margin-bottom: 5px;
-    box-sizing: border-box !important;
-    width: 60%;
-    margin-bottom: 10px;
-
-    &:focus {
-      border-bottom: 3px solid #00bfa5;
-    }
-  }
-
-  &__btn {
-    margin: 10px 0;
-  }
-}
 </style>
