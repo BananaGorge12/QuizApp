@@ -5,10 +5,10 @@
     </header>
     <h2 class="home-main__title">Your Quizzes</h2>
     <main class="home-main">
-      <router-link v-for="quiz in quizzes" :key="quiz._id" :to="{ name:'takeQuiz',params:{id:quiz._id} }" class="home-main__card">
+      <router-link v-for="quiz in quizzes" :key="quiz._id" :to="{ name:'quizPage',params:{id:quiz._id} }" class="home-main__card">
         <h2>{{quiz.name}}</h2>
         <div class="home-main__preview-cover"></div>
-        <iframe class="home-main__preview" :src="`/quiz/${quiz._id}/take`" frameborder="0"></iframe>
+        <iframe tabindex="-1" class="home-main__preview" :src="`/quiz/${quiz._id}/take`" frameborder="0"></iframe>
       </router-link>
     </main>
   </div>
@@ -74,6 +74,7 @@ export default {
     text-decoration: none;
     padding: .4rem;
     transition: all .2s;
+    outline: none;
 
     &:hover,&:focus{
       transform: translateY(-.5rem);

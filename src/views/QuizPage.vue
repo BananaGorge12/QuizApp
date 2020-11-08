@@ -1,92 +1,48 @@
 <template>
-  <v-app v-if="quiz" class="quiz-page">
-    <h1 class="quiz-page__title">{{quiz.name}}</h1>
-    <v-data-table :headers="headers" :items="students" item-key="name" class="elevation-1">
-      <template v-slot:[`item.viewResultsButtons`]="{ item }">
-        <v-icon class="u-pointer" @click="viewResults(item)">mdi-eye</v-icon>
-      </template>
-    </v-data-table>
-    <v-row no-gutters align="center">
-      <v-btn class="flex-grow-1" color="blue lighten-1" @click="formDialog = true">Add New Student</v-btn>
-      <v-btn class="flex-grow-1" color="yellow lighten-1" @click="sendToEdit">Edit Quiz</v-btn>
-      <v-btn class="flex-grow-1" color="green lighten-1" @click="sendToTest">Test Quiz</v-btn>
-      <v-btn class="flex-grow-1" color="red lighten-1" @click="deleteDataPopup = true; deleteDataPopupName = 'quiz'">Delete Quiz</v-btn>
-    </v-row>
-    <p v-if="feedback">{{feedback}}</p>
-    <!-- start of form popup -->
-    <v-dialog v-model="formDialog" persistent max-width="600px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">Add New Student</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field v-model="newStudentEmail" label="Email" required></v-text-field>
-              </v-col>
-            </v-row>
-            <p class="u-error-message" v-if="popupFeedback">{{popupFeedback}}</p>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="formDialog = false; popupFeedback = null">Close</v-btn>
-          <v-btn color="blue darken-1" text @click="addNewStudent">Add</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <!-- end of from popup. start of delete quiz popup -->
-      <v-dialog v-model="deleteDataPopup" persistent max-width="290">
-      <v-card>
-        <v-card-title class="headline">Are you sure you want to delete this {{deleteDataPopupName}}?</v-card-title>
-        <v-card-text>By deleting the {{deleteDataPopupName}} you or your student won't be able to access this quiz, and all recored of it will be removed for ever(a long time!).</v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="deleteDataPopup = false">Cancel</v-btn>
-          <v-btn color="red darken-1" text @click="deleteData">Delete</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <!-- end of delete quiz popup. start of student results popup -->
-      <v-dialog v-model="studentResultsPopup" fullscreen hide-overlay transition="dialog-bottom-transition">
-        <v-card>
-          <v-toolbar dark color="primary">
-            <v-btn icon dark @click="studentResultsPopup = false">
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
-            <v-toolbar-title>Settings</v-toolbar-title>
-          </v-toolbar>
-          <!-- start of context -->
-        <div v-if="selectedStudentData" class="quiz-page__student-results">
-          <h1 class="u-ma-b">Student: <span class="u-bold">{{selectedStudentData.name}}</span></h1>
-          <div v-if="selectedStudentData.answers" class="quiz-page__student-results-data">
-                <h2 class="u-ma-b">Score: <span class="u-bold">{{selectedStudentData.score}}</span></h2>
-                <h2 class="u-ma-b">Answers:</h2>
-                <ul>
-                  <li class="u-ma-b" v-for="(question,index) in selectedStudentData.answers" :key="index">
-                    <h3>Question: {{question.title}}</h3>
-                    <h3 class="u-indent">Student Answer: "{{question.answer}}"</h3>
-                    <h3 class="u-indent">Correct: {{isAnswerCorrect(question.answer,index)}}</h3>
-                    <h3 v-if="getCorrectAnswer(index).length < 2" class="u-indent">Correct Answer: "{{getCorrectAnswer(index)[0].title}}"</h3>
-                    <h3 class="u-indent" v-else>
-                      <span>Correct Answers</span>
-                      <ul>
-                        <li v-for="(answer,indexTwo) in getCorrectAnswer(index)" :key="indexTwo">"{{ answer.title }}"</li>
-                      </ul>
-                    </h3>
-                  </li>
-                </ul>
-          </div>
-          <h2 class="u-ma-b" v-else>Student didnt take the quiz</h2>
-          <v-btn color="red" @click="deleteDataPopup = true; deleteDataPopupName = 'student'">Delete User</v-btn>
-        </div>
-        <h1 v-else>No User Selected</h1>
-        </v-card>
-    </v-dialog>
-    <!-- end of student results popup -->
-  </v-app>
-  <h1 v-else>loading..</h1>
+  <div class="quiz-page">
+    <header class="header">
+      <h1 class="header__title">{{ quiz.name }}</h1>
+    </header> 
+    <main class="quiz-page-main">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Score</th><th/>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(student,index) in students" :key="index">
+            <td>{{ student.name }}</td>
+            <td>{{ student.email }}</td>
+            <td>{{ student.score}}</td>
+            <td>click</td>
+          </tr>
+          <tr v-if="students.length <= 0">
+            <h3>No Students Added Yet..</h3>
+          </tr>
+        </tbody>
+      </table>
+      <div class="quiz-page-main__btn-row">
+        <button class="quiz-page-main__btn" @click="popupData = { func:'add',title:'Add New User',placeholder:'Email',btn:'Add',YorN:false }">New Student</button>
+        <button class="quiz-page-main__btn" @click="sendToTest">Edit Quiz</button>
+        <button class="quiz-page-main__btn">Test Quiz</button>
+        <button class="quiz-page-main__btn" @click="popupData = { func:'delete',title:'Are You Sure You Want To Delete This Quiz?',YorN:true,btn:'delete'}">Delete Quiz</button>
+      </div>
+      <p v-if="feedback" class="feedback">{{feedback}}</p>
+    </main>
+    <!-- popup -->
+    <div v-if="popupData" class="form-popup">
+      <div class="form-popup__overlay"></div>
+      <div class="form-popup__content">
+        <h3 class="form-popup__title">{{popupData.title}}</h3>
+        <input v-if="!popupData.YorN" v-model="popupInput" class="form-popup__input" :placeholder="popupData.placeholder" type="text">
+        <button v-if="popupData.YorN" @click="popupData = null" class="form-popup__btn">Cancel</button>
+        <button @click="popupFunc(popupData.func)" class="form-popup__btn">{{popupData.btn}}</button>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import axios from 'axios'
@@ -94,24 +50,21 @@ export default {
   name: "quizPage",
   data() {
     return {
-      //remove
-      selectedStudentData:null,
+      popupInput:null,
+      popupData:false,
       quiz:false,
-      formDialog:false,
-      deleteDataPopup:false,
-      deleteDataPopupName:null,
-      studentResultsPopup:false,
-      newStudentEmail:null,
-      popupFeedback:null,
       students: [],
       feedback:null,
-      headers:[
-        { text: 'Student', align: 'start', sortable: false, value: 'name',},
-        { text: 'Email', value: 'email' },
-        { text: 'Score', value: 'score' },
-        { text: 'View', value: 'viewResultsButtons' },
-      ]
     };
+  },
+  created(){
+    if(!this.storeQuizzes){
+      this.$router.push({ name:'Home' })
+    }
+
+    this.quiz = this.storeQuizzes.filter(quiz => quiz._id == this.$route.params.id)[0]
+
+    this.students = this.quiz.students
   },
   methods: {
       //sets user score
@@ -133,6 +86,17 @@ export default {
           this.deleteQuiz()
         }else if(this.deleteDataPopupName == 'student'){
           this.unassignStudent()
+        }
+      },
+      popupFunc(expr){
+        switch(expr){
+          case 'add':
+            this.addNewStudent()
+            break;
+          case 'delete':
+            this.deleteQuiz()
+            break;
+
         }
       },
       //view Results
@@ -177,13 +141,9 @@ export default {
         }).then(res => {
             this.students = this.students.filter(student => student.id != res.data._id)
             this.feedback = null
-            this.deleteDataPopup = false
-            this.studentResultsPopup = false
         }).catch(err => {
             console.error(err.response.data)
             this.feedback = err.response.data
-            this.deleteDataPopup = false
-            this.studentResultsPopup = false
         })
       },
       //deletes quiz
@@ -202,45 +162,108 @@ export default {
       },
       //adds new student to quiz
       addNewStudent(){
-        if(!this.newStudentEmail){
-          return this.popupFeedback = 'Please Enter An Email'
+        if(!this.popupInput){
+          this.popupData = null
+          return this.feedback = 'Please Enter An Email'
         }
         this.feedback = null
 
-        axios.post(`/api/quiz/${encodeURIComponent(this.$route.params.id)}/students`,{email:this.newStudentEmail},{
+        axios.post(`/api/quiz/${encodeURIComponent(this.$route.params.id)}/students`,{email:this.popupInput},{
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }).then(res => {
             this.students.push(res.data)
-            this.newStudentEmail = null
-            this.popupFeedback = null
-            this.formDialog = false
+            this.feedback = null
+            this.popupInput = null
+            this.popupData = null
         }).catch(err => {
-            this.popupFeedback = err.response.data.error
-            this.newStudentEmail = null
+            this.feedback = err.response.data.error
+            this.popupData = null
+            this.popupInput = null
         })
-      },
+
+      }
   },
   computed:{
-      storeQuizzes(){
-          return this.$store.state.quizzes
-      },
+    storeQuizzes(){
+      return this.$store.state.quizzes
+    },  
   }
 };
 </script>
 <style lang="scss">
-    .quiz-page {
-      width: 70%;
-      margin: 0 auto;
-      text-align: center;
+@import '../sass/form-popup';
+.quiz-page{
+  &-main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: roboto;
 
-      &__title{
-          margin-bottom: 40px;
+    &__btn-row{
+      width: 50%;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    &__btn{
+      background-color: #0085FF;
+      font-family: 'wendy one';
+      padding: .8rem 1.2rem;
+      border-radius: .3rem;
+      color: #ffffff;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      outline: none;
+      transition: all .2s;
+
+      &:hover,&:focus{
+        background-color: darken(#0085FF,5);
       }
 
-      &__student-results *{
-        font-weight: 500;
+      &:active{
+        background-color: darken(#0085FF,10);
       }
     }
+
+    table{
+      border-collapse: collapse;
+      font-size: 1.2rem;
+      width: 50%;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      margin-bottom: 2rem;
+
+      thead tr{
+        background-color: #0085FF;
+        color: #ffffff;
+        text-align: left;
+        font-weight: bold;
+      }
+    }
+
+    th,td{
+      padding: 1.2rem 1.5rem;
+    }
+
+    tbody tr{
+      border-bottom: .1rem solid #dddddd;
+      background: #ffffff;
+
+      h3{
+        background: none;
+        width: 200%; 
+        padding: 1rem;
+      }
+
+      &:nth-last-of-type(odd){
+        background-color: #f3f3f3;
+      }
+
+      &:last-child{
+        border-bottom: .1rem solid #dddddd;
+      }
+    }
+  }
+}
 </style>

@@ -1,23 +1,21 @@
 <template>
-  <div class="navigation">
-    <nav tabindex=0 class="navbar" :class="{ 'navbar--active':isNavOpen }">
-      <svg class="navbar__icon">
-        <symbol id="icon-menu" viewBox="0 0 32 32">
-          <path d="M2 6h28v6h-28zM2 14h28v6h-28zM2 22h28v6h-28z"></path>
-        </symbol>
-        <use xlink:href="#icon-menu"></use>
-      </svg>
-      <ul class="navbar__list">
-        <li v-if="!user"><router-link class="navbar__item" to="/login">Login</router-link></li>
-        <li v-if="!user"><router-link class="navbar__item" to="/signup">Signup</router-link></li>
-        <li v-if="!user"><router-link class="navbar__item" to="/">Home</router-link></li>
-        <li v-if="user"><router-link class="navbar__item" to="/new-quiz">New Quiz</router-link></li>
-        <li v-if="user"><router-link class="navbar__item" to="/profile">Profile</router-link></li>
-        <li v-if="user"><router-link class="navbar__item" to="/">Quizzes</router-link></li>
-        <li v-if="user"><button @click="logout" class="navbar__item">Logout</button></li>
-      </ul>
-    </nav>
-  </div>
+  <nav tabindex=0 class="navbar" :class="{ 'navbar--active':isNavOpen }">
+    <svg class="navbar__icon">
+      <symbol id="icon-menu" viewBox="0 0 32 32">
+        <path d="M2 6h28v6h-28zM2 14h28v6h-28zM2 22h28v6h-28z"></path>
+      </symbol>
+      <use xlink:href="#icon-menu"></use>
+    </svg>
+    <ul class="navbar__list">
+      <li v-if="!user"><router-link class="navbar__item" to="/login">Login</router-link></li>
+      <li v-if="!user"><router-link class="navbar__item" to="/signup">Signup</router-link></li>
+      <li v-if="!user"><router-link class="navbar__item" to="/">Home</router-link></li>
+      <li v-if="user"><router-link class="navbar__item" to="/new-quiz">New Quiz</router-link></li>
+      <li v-if="user"><router-link class="navbar__item" to="/profile">Profile</router-link></li>
+      <li v-if="user"><router-link class="navbar__item" to="/">Quizzes</router-link></li>
+      <li v-if="user"><button @click="logout" class="navbar__item">Logout</button></li>
+    </ul>
+  </nav>
 </template>
 <script>
 import axios from 'axios'

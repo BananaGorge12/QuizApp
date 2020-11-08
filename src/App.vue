@@ -48,6 +48,12 @@ button{
   background: none;
 }
 
+.feedback{
+  margin-top: 2rem;
+  font-family: 'wendy one', roboto;
+  font-size: 1.2rem;
+}
+
 .u-no-scroll{
   overflow: hidden;
 }
