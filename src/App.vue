@@ -45,10 +45,23 @@ button{
   font-family: inherit;
   font-size: inherit;
   cursor: pointer;
+  background: none;
+}
+
+.u-no-scroll{
+  overflow: hidden;
 }
 
 .u-f40{
   font-size: 4rem !important;
+}
+
+.u-f20{
+  font-size: 2rem;
+}
+
+.u-no-bold{
+  font-weight: 400;
 }
 
 .u-indent{
@@ -57,5 +70,9 @@ button{
 
 .u-no-margin{
   margin: 0 !important;
+}
+
+.u-margin-bottom{
+  margin-bottom: 1.3rem;
 }
 </style>

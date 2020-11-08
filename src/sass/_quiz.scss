@@ -1,5 +1,52 @@
+.quiz{
+    &__question{
+        margin-bottom: 2rem;
+    }
+
+    &__text-question{
+        border-bottom: .3rem solid;
+        width: 50%;
+
+        input{
+            width: 100%;
+            font-size: 1.5rem;
+            outline: none;
+        }
+    }
+
+    &__text-question::after{
+        content: "";
+        background-color: #5FAEFF;
+        width: 100%;
+        display: block;
+        z-index: 1000;
+        position: relative;
+        top: .3rem;
+        height: .4rem;
+        transform: scaleX(0);
+        transition: all .2s;
+        transform-origin: 0%;
+    }
+
+    &__text-question:focus-within::after{
+        transform: scaleX(1);
+    }
+
+    &__paragraph{
+        font-size: 1.5rem;
+    }
+}
+
 .quiz-main{
     font-family: roboto;
     width: 70%;
     margin: 0 auto;
+
+    & > ul{
+        list-style: none;
+    }
+
+    & div{
+        margin-bottom: 3rem;
+    }
 }

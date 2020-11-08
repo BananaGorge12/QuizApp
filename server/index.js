@@ -1,5 +1,4 @@
 const express = require('express')
-const path = require('path')
 
 
 //start express
@@ -24,15 +23,14 @@ app.use(quizRoutes)
 
 
 
-
+//route from prod
 app.use(express.static(__dirname + '/dist/'))
 
-//handel SPA
 app.get(/.*/, (req,res) => {
     res.sendFile(__dirname + '/dist/index.html')
 })
 
-
+//listens for port (3000 for dev)
 app.listen(port,() => {
     console.log(`Runing on port ${port}`)
 })

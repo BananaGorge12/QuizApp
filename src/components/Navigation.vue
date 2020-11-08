@@ -10,6 +10,7 @@
       <ul class="navbar__list">
         <li v-if="!user"><router-link class="navbar__item" to="/login">Login</router-link></li>
         <li v-if="!user"><router-link class="navbar__item" to="/signup">Signup</router-link></li>
+        <li v-if="!user"><router-link class="navbar__item" to="/">Home</router-link></li>
         <li v-if="user"><router-link class="navbar__item" to="/new-quiz">New Quiz</router-link></li>
         <li v-if="user"><router-link class="navbar__item" to="/profile">Profile</router-link></li>
         <li v-if="user"><router-link class="navbar__item" to="/">Quizzes</router-link></li>

@@ -6,16 +6,64 @@
     <form @submit.prevent class="quiz-main quiz-maker-main">
       <ul>
         <li v-for="(question,index) in questions" :key="index">
-          <input v-bind="question.title" class="quiz-maker-main__question-title">
-          <ul class="quiz-main__list u-indent">
-            <li v-for="(option,index) in question.options" :key="index">
-              <input class="quiz-maker-main__question-option" type="text">
-            </li>
-          </ul>
+          <div v-if="question.type == 'multi'" class="quiz__question quiz__muli-choice">
+            <input :value="question.title" type="text" class="quiz-maker-main__question-title">
+            <ul class="quiz-main__list u-indent">
+              <li v-for="(option,index) in question.options" :key="index">
+                <input :class="{ 'quiz-maker-main__question-option--correct':option.correct,'quiz-maker-main__question-option--incorrect':!option.correct }"
+                  :value="option.title" class="quiz-maker-main__question-option" type="text">
+                <button @click="option.correct = !option.correct" class="quiz-maker-main__is-correct-btn">
+                 <!-- correct btn -->
+                <svg v-if="option.correct" class="quiz-maker-main__icon quiz-maker-main__icon--correct icon icon-checkmark">
+                  <symbol id="icon-checkmark" viewBox="0 0 32 32">
+                    <path d="M27 4l-15 15-7-7-5 5 12 12 20-20z"></path>
+                  </symbol>
+                  <use xlink:href="#icon-checkmark"></use>
+                </svg>
+                <!-- incorrect btn -->
+                <svg v-else class="quiz-maker-main__icon icon quiz-maker-main__icon--incorrect icon-cross">
+                  <symbol id="icon-cross" viewBox="0 0 32 32">
+                    <path d="M31.708 25.708c-0-0-0-0-0-0l-9.708-9.708 9.708-9.708c0-0 0-0 0-0 0.105-0.105 0.18-0.227 0.229-0.357 0.133-0.356 0.057-0.771-0.229-1.057l-4.586-4.586c-0.286-0.286-0.702-0.361-1.057-0.229-0.13 0.048-0.252 0.124-0.357 0.228 0 0-0 0-0 0l-9.708 9.708-9.708-9.708c-0-0-0-0-0-0-0.105-0.104-0.227-0.18-0.357-0.228-0.356-0.133-0.771-0.057-1.057 0.229l-4.586 4.586c-0.286 0.286-0.361 0.702-0.229 1.057 0.049 0.13 0.124 0.252 0.229 0.357 0 0 0 0 0 0l9.708 9.708-9.708 9.708c-0 0-0 0-0 0-0.104 0.105-0.18 0.227-0.229 0.357-0.133 0.355-0.057 0.771 0.229 1.057l4.586 4.586c0.286 0.286 0.702 0.361 1.057 0.229 0.13-0.049 0.252-0.124 0.357-0.229 0-0 0-0 0-0l9.708-9.708 9.708 9.708c0 0 0 0 0 0 0.105 0.105 0.227 0.18 0.357 0.229 0.356 0.133 0.771 0.057 1.057-0.229l4.586-4.586c0.286-0.286 0.362-0.702 0.229-1.057-0.049-0.13-0.124-0.252-0.229-0.357z"></path>
+                  </symbol>
+                  <use xlink:href="#icon-cross"></use>
+                </svg>
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div v-else-if="question.type == 'text'" class="quiz__question quiz__text-question">
+            <h3 class="u-margin-bottom u-f20 u-no-bold">{{question.title}}</h3>
+            <input type="text" placeholder="Leave Blank For Manual Checking." v-model="question.answer">
+          </div>
+          <div v-else-if="question.type == 'video'" class="quiz__video">
+            <iframe width="560" height="315" :src="`https://www.youtube.com/embed/${getVideoId(question.url)}`" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          <div v-else-if="question.type == 'paragraph'" class="quiz__paragraph">
+            <textarea class="quiz-maker-main__textarea" cols="30" rows="10" v-model="question.text"></textarea>
+          </div>
         </li>
       </ul>
     </form>
-    <button class="quiz-maker__nq-btn" @click="addNewQuestion">+</button>
+    <div tabindex="0" class="quiz-maker__nq-container">
+      <span>+</span>
+      <button class="quiz-maker__nq-btn" @click="addNewTextQuestion">Text</button>
+      <button class="quiz-maker__nq-btn" @click="addNewMuliChoiceQuestion">Muli Choice</button>
+      <button class="quiz-maker__nq-btn" @click="ytPopup = true">Video</button>
+      <button class="quiz-maker__nq-btn" @click="addNewParagraph">Paragraph</button>
+    </div>
+    <!-- popup -->
+    <div v-if="ytPopup" class="ytpopup__content">
+      <svg @click="ytPopup = false" class="icon-cross">
+        <symbol id="icon-cross" viewBox="0 0 32 32">
+          <path d="M31.708 25.708c-0-0-0-0-0-0l-9.708-9.708 9.708-9.708c0-0 0-0 0-0 0.105-0.105 0.18-0.227 0.229-0.357 0.133-0.356 0.057-0.771-0.229-1.057l-4.586-4.586c-0.286-0.286-0.702-0.361-1.057-0.229-0.13 0.048-0.252 0.124-0.357 0.228 0 0-0 0-0 0l-9.708 9.708-9.708-9.708c-0-0-0-0-0-0-0.105-0.104-0.227-0.18-0.357-0.228-0.356-0.133-0.771-0.057-1.057 0.229l-4.586 4.586c-0.286 0.286-0.361 0.702-0.229 1.057 0.049 0.13 0.124 0.252 0.229 0.357 0 0 0 0 0 0l9.708 9.708-9.708 9.708c-0 0-0 0-0 0-0.104 0.105-0.18 0.227-0.229 0.357-0.133 0.355-0.057 0.771 0.229 1.057l4.586 4.586c0.286 0.286 0.702 0.361 1.057 0.229 0.13-0.049 0.252-0.124 0.357-0.229 0-0 0-0 0-0l9.708-9.708 9.708 9.708c0 0 0 0 0 0 0.105 0.105 0.227 0.18 0.357 0.229 0.356 0.133 0.771 0.057 1.057-0.229l4.586-4.586c0.286-0.286 0.362-0.702 0.229-1.057-0.049-0.13-0.124-0.252-0.229-0.357z"></path>
+        </symbol>
+        <use xlink:href="#icon-cross"></use>
+      </svg>
+      <h3>Youtube Link</h3>
+      <input v-model="ytLink" placeholder="Link" type="text">
+      <button @click="addVideo">Add</button>
+    </div>
+    <div v-if="ytPopup" class="ytpopup__overlay"></div>
   </div>
 </template>
 <script>
@@ -24,29 +72,9 @@ export default {
   name: "newQuiz",
   data() {
     return {
-      questions: [
-        {
-          title: `Question 1`,
-          options: [
-            {
-              title: "Option 1",
-              correct: true,
-            },
-            {
-              title: "Option 2",
-              correct: false,
-            },
-            {
-              title: "Option 3",
-              correct: false,
-            },
-            {
-              title: "Option 4",
-              correct: false,
-            },
-          ],
-        }
-      ],
+      ytPopup:false,
+      ytLink:null,
+      questions: [],
       quizName:'New Quiz'
     };
   },
@@ -67,9 +95,29 @@ export default {
         return true
       })
     },
-    addNewQuestion() {
+    getVideoId(url){
+      const id = new URLSearchParams(url).entries().next().value[1]
+      return id
+    },
+    addNewParagraph(){
+      this.questions.push(        {
+          type:'paragraph',
+          text:'Write Your Paragraph Here...'
+      })
+    },
+    addVideo(){
+      this.questions.push({
+          title:'Video Question',
+          type:'video',
+          url:this.ytLink
+      })
+      this.ytLink = null
+      this.ytPopup = false
+    },
+    addNewMuliChoiceQuestion() {
       const newQuestion = {
-        title: `Question ${this.questions.length + 1}`,
+        title: 'Muli Choice Question',
+        type:'multi',
         options: [
           {
             title: "Option 1",
@@ -90,6 +138,13 @@ export default {
         ],
       };
       this.questions.push(newQuestion);
+    },
+    addNewTextQuestion(){
+      this.questions.push({
+        title:'Text Question',
+        type:'text',
+        answer:''
+      })
     },
     saveQuiz() {
       axios.post("/api/quiz", {name:this.quizName,questions:this.questions}, {
@@ -112,65 +167,228 @@ export default {
 };
 </script>
 <style lang="scss">
-  .quiz-maker{
+.ytpopup{
 
-    &-main{
-      font-size: 2rem;
+  &__overlay{
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    background-color: rgba(0, 0, 0, .3);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    animation: fade-in .4s;
+  }
+}
 
-      &__question-title{
-        border-bottom: 1px solid;
-        outline: none;
-        transition: all .2s;
-        margin-bottom: 1rem;
+.ytpopup__content{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+  transform: translate(-50%,-50%);
+  background-color: #ffffff;
+  font-family: 'wendy one';
+  text-align: center;
+  font-size: 1.4rem;
+  padding: 2rem 5rem;
+  border-radius: .3rem;
+  animation: fade-in .4s;
 
-        &:focus{
-          border-bottom: 2px solid #248CEC;
-        }
-      }
+  h3{
+    margin-bottom: 2rem;
+  }
 
-      &__question-option{
-        text-align: left;
-        margin-bottom: 1rem;
-        outline: none;
-        border-bottom: 2px solid;
-        box-sizing: border-box;
-        transition: all .2s;
+  input{
+    outline: none;
+    border-bottom:.2rem solid;
+    transition: all .2s;
+    width: 110%;
+    margin: 0 auto;
+    margin-bottom: 2rem;
 
-        &:focus{
-          border-bottom: 2px solid #248CEC;
-        }
+    &:focus{
+      border-bottom:.2rem solid #FF1744;
+    }
+  }
+
+  button{
+    display: block;
+    margin: 0 auto;
+    background: #FF1744;
+    padding: .2rem .7rem;
+    border-radius: .3rem;
+    color: #ffffff;
+    outline: none;
+
+    &:hover,&:focus{
+      background-color: lighten(#FF1744,7);
+    }
+
+    &:active{
+      background-color: lighten(#FF1744,12);
+    }
+  }
+
+  svg{
+    cursor: pointer;
+    height: 1rem;
+    position: absolute;
+    top: 5%;
+    right: -30%;
+  }
+}
+.quiz-maker{
+
+  &-main{
+    font-size: 2rem;
+
+    &__textarea{
+      resize: none;
+      font-family: inherit;
+      border: .2rem solid #4396da;
+      border-radius: .4rem;
+      display: block;
+      width: 80%;
+      height: 10rem;
+      padding: 1rem;
+      font-size: 1.5rem;
+      outline: none;
+      transition: all .2s;
+
+      &:focus{
+        border: .2rem solid darken(#4396da,10);
       }
     }
 
-    &__nq-btn{
-      background-color: #248CEC;
-      height: 5rem;
-      width: 5rem;
-      color: #ffffff;
-      border-radius: 50%;
-      font-size: 5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    &__question-title{
+      border-bottom: .2rem solid;
       outline: none;
-      position: fixed;
-      top: 85%;
-      right: 3%;
       transition: all .2s;
-      transform: translateY(0);
-      box-shadow: 3px 5px 4px rgba(0, 0, 0, 0.25);
+      margin-bottom: 1rem;
 
-      &:hover,:focus{
-        background-color: darken(#248CEC,5);
-        transform: translateY(-.6rem);
-        box-shadow: 4px 5px 4px rgba(0, 0, 0, 0.25);
+      &:focus{
+        border-bottom: .2rem solid #248CEC;
+      }
+    }
+
+    &__question-option{
+      text-align: left;
+      margin-bottom: 1rem;
+      outline: none;
+      border-bottom: 2px solid;
+      box-sizing: border-box;
+      transition: all .2s;
+      margin-right: 1rem;
+
+      &--correct{
+        border-bottom: .3rem solid #00E676;
       }
 
-      &:active{
-        background-color: darken(#248CEC,10);
-        transform: translateY(-.3rem);
-        box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.25);
+      &--incorrect{
+        border-bottom: .3rem solid #ff4444;
+      }
+    }
+
+    &__icon{
+      background:transparent;
+      width: 2rem;
+      height: 2rem;
+      position: relative;
+      top: .5rem;
+      transition: all .2s;
+
+      &--correct{
+        fill: #00E676;
+      }
+
+      &--incorrect{
+        fill: #ff4444;
+      }
+    }
+
+    &__is-correct-btn{
+      outline: none;
+
+      &:hover .quiz-maker-main__icon,&:focus .quiz-maker-main__icon{
+        &--correct{
+          fill: darken(#00E676,5);
+        }
+
+        &--incorrect{
+          fill: lighten(#ff4444,7);
+        }
+      }
+
+      &:active .quiz-maker-main__icon{
+        &--correct{
+          fill: darken(#00E676,10);
+        }
+
+        &--incorrect{
+          fill: lighten(#ff4444,12);
+        }
       }
     }
   }
+
+  &__nq-container{
+    background-color: #248CEC;
+    height: 5rem;
+    width: 5rem;
+    color: #ffffff;
+    border-radius: 50%;
+    font-size: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    flex-direction: column;
+    position: fixed;
+    bottom: 5%;
+    right: 3%;
+    transition: all .4s;
+    transform: translateY(0);
+    box-shadow: 3px 5px 4px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+
+    .quiz-maker__nq-btn{
+      opacity: 0;
+      font-size: 0;
+      outline: none;
+      border-radius: .3rem;
+      transition: all .4s;
+      font-family: 'wendy one';
+      display: block;
+      background: #4FAAFF;
+      width: 100%;
+      user-select: none;
+    }
+
+    &:focus,&:focus-within{
+      border-radius: 1rem;
+      width: 15rem;
+      height: 20rem;
+      font-size: 0;
+      justify-content: flex-start;
+      padding: 1rem;
+
+      .quiz-maker__nq-btn{
+        font-size: 2rem;
+        margin: 1rem;
+        padding: .3rem;
+        opacity: 1;
+
+        &:hover{
+          background-color: darken(#4FAAFF,5);
+        }
+
+        &:focus{
+          background-color: darken(#4FAAFF,7);
+        }
+      }
+    }
+
+  }
+}
 </style>
