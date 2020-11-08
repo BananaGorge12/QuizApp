@@ -4,33 +4,21 @@
     }
 
     &__text-question{
-        border-bottom: .3rem solid;
         width: 50%;
 
         input{
             width: 100%;
             font-size: 1.5rem;
             outline: none;
+            transition: all .2s;
+            border-bottom:.3rem solid;
+
+            &:focus{
+              border-bottom:.3rem solid #4396da;
+            }
         }
     }
 
-    &__text-question::after{
-        content: "";
-        background-color: #5FAEFF;
-        width: 100%;
-        display: block;
-        z-index: 1000;
-        position: relative;
-        top: .3rem;
-        height: .4rem;
-        transform: scaleX(0);
-        transition: all .2s;
-        transform-origin: 0%;
-    }
-
-    &__text-question:focus-within::after{
-        transform: scaleX(1);
-    }
 
     &__paragraph{
         font-size: 1.5rem;

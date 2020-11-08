@@ -32,7 +32,7 @@
             </ul>
           </div>
           <div v-else-if="question.type == 'text'" class="quiz__question quiz__text-question">
-            <h3 class="u-margin-bottom u-f20 u-no-bold">{{question.title}}</h3>
+            <input class="u-margin-bottom quiz-maker-main__text-title" v-model="question.title">
             <input type="text" placeholder="Leave Blank For Manual Checking." v-model="question.answer">
           </div>
           <div v-else-if="question.type == 'video'" class="quiz__video">
@@ -242,6 +242,17 @@ export default {
 
   &-main{
     font-size: 2rem;
+
+    .quiz__text-question &__text-title{
+      font-size: 1.7rem;
+      width: 100%;
+      transition: all .2s;
+      border: none;
+
+      &:focus{
+        border-bottom:.4rem solid #4396da;
+      }
+    }
 
     &__textarea{
       resize: none;

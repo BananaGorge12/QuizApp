@@ -15,11 +15,13 @@
         color: #ffffff;
         font-size: 8rem;
         text-align: center;
+        user-select: none;
     }
 
     &__sub{
         color: #ffffff;
         font-size: 2rem;
         text-align: center;
+        user-select: none;
     }
 }
