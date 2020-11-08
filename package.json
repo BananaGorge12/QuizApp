@@ -14,10 +14,10 @@
     "git:push": "git push origin master",
     "heroku:commit": "git commit -m\"deploy\"",
     "heroku:push": "git push heroku master",
-    "push":"npm-run-all git:push heroku:push",
+    "push": "npm-run-all git:push heroku:push",
     "fix": "npm-run-all git:add git:fix git:push",
     "deploy": "npm-run-all build git:add heroku:commit heroku:push",
-    "master":"npm-run-all build git:add heroku:commit git:push heroku:push"
+    "master": "npm-run-all build git:add heroku:commit git:push heroku:push"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.3.0",
@@ -30,6 +30,7 @@
     "mongoose": "^5.10.10",
     "npm-run-all": "^4.1.5",
     "os": "^0.1.1",
+    "uniqid": "^5.2.0",
     "validator": "^13.1.17",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",

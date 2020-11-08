@@ -23,6 +23,54 @@
     &__paragraph{
         font-size: 1.5rem;
     }
+
+    &__title{
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    &__radio-input{
+        display: none;
+    }
+
+    &__radio-input:checked ~ label &__radio-btn::after{
+        opacity: 1;
+    }
+
+    &__radio-btn{
+        width: 2rem;
+        height: 2rem;
+        margin-right:.5rem ;
+        display: inline-block;
+        border-radius: 50%;
+        border: .2rem solid #0085FF;
+        position: relative;
+    }
+
+    &__radio-btn::after{
+        content: "";
+        display: block;
+        height: 1.1rem;
+        width: 1.1rem;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        background-color: #0085FF;
+        transform: translate(-50%,-50%);
+        opacity: 0;
+        transition: all .2s;
+    }
+
+    &__multi-choice-option-label{
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    &__multi-choice-option{
+        margin-bottom: 1rem;
+    }
 }
 
 .quiz-main{

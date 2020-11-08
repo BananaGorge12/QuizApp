@@ -1,30 +1,49 @@
 <template>
-    <v-app v-if="quiz" class="take-quiz" :class="{'.u-loading':loading}">
-        <h1 class="take-quiz__quiz-name">{{quiz.name}}</h1>
-        <form @submit.prevent="turnInQuiz" action="#">
+    <div v-if="quiz" class="take-quiz">
+        <header class="header">
+            <h1 class="header__title">{{ quiz.name }}</h1>
+        </header>
+        <form class="quiz-main">
             <ul>
-                <li class="take-quiz__question" v-for="(question,index) in quiz.questions" :key="index">
-                    <h3>{{question.title}}</h3>
-                    <v-radio-group v-for="(option,index) in question.options" :key="index" v-model="question.selected">
-                      <v-radio
-                        class="u-no-margin"
-                        :label="option.title"
-                        :value="option.title"
-                      ></v-radio>
-                    </v-radio-group>
+                <li v-for="(question,index) in quiz.questions" :key="index">
+                    <div v-if="question.type == 'text'" class="quiz__text-question">
+                        <h3 class="quiz__title">{{ question.title }}</h3>
+                        <input type="text" v-model="question.studentAnswer" class="quiz__answer-input" placeholder="Answer">
+                    </div>
+                    <div v-if="question.type == 'multi'" class="quiz__muli-choice">
+                        <h3 class="quiz__title">{{ question.title }}</h3>
+                        {{newId()}}
+                        <ul class="u-no-list-style">
+                            <li class="quiz__multi-choice-option" v-for="(option,index) in question.options" :key="index">
+                                <input v-model="question.studentAnswer" class="quiz__radio-input" type="radio" :id="`${option.title}+${index}`" :name="currentId">    
+                                <label :for="`${option.title}+${index}`" class="quiz__multi-choice-option-label">
+                                    <span class="quiz__radio-btn"></span>
+                                    <span>{{ option.title }}</span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-if="question.type == 'video'" class="quiz__video">
+                        <iframe width="560" height="315" :src="`https://www.youtube.com/embed/${getVideoId(question.url)}`" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div v-else-if="question.type == 'paragraph'" class="quiz__paragraph">
+                        <p>{{ question.text }}</p>
+                    </div>
                 </li>
             </ul>
-            <input class="take-quiz__btn" type="submit">
         </form>
-        <h4 class="take-quiz__score" v-if="score">{{score}}</h4>
-        <p class="u-error-message" v-if="feedback">{{feedback}}</p>
-    </v-app>
-    <h1 v-else>loading</h1>
+    </div>
+    <notFound v-else />
 </template>
 <script>
+import notFound from './404'
 import axios from 'axios'
+import uniqid from 'uniqid'
 export default {
     name:'takeQuiz',
+    components:{
+        notFound
+    },
     data(){
         return{
             quiz:null,
@@ -33,6 +52,7 @@ export default {
             finished:false,
             score:null,
             loading:false,
+            currentId:null,
         }
     },
     async created(){
@@ -40,6 +60,16 @@ export default {
         this.validiteUser()
     },
     methods:{
+        newId(){
+            const id = uniqid()
+            
+            this.currentId = id
+            return null
+        },
+        getVideoId(url){
+            const id = new URLSearchParams(url).entries().next().value[1]
+            return id
+        },
         validiteUser(){
             let isUserAllowed = false
             
@@ -139,76 +169,5 @@ export default {
 }
 </script>
 <style lang="scss">
-.take-quiz {
-  width: 70%;
-  margin: 0 auto;
 
-  ul {
-    list-style: square;
-  }
-
-  * {
-    margin: 0 auto;
-  }
-
-  h1,h2{
-    margin-bottom: 20px;
-  }
-
-  &__quiz-name{
-    text-align: center;
-  }
-
-  &__btn {
-    margin: 50px auto 20px;
-    width: 50%;
-    background-color: #2196F3;
-    color: white;
-    padding: 10px 25px;
-    border-radius: 10px;
-    width: 300px;
-    display: block;
-    outline: none;
-
-    &:hover{
-        background-color: #1976D2;
-    }
-
-    &:active{
-        background-color: #1565C0;
-    }
-  }
-
-  &__score{
-      font-size: 22px;
-      font-weight: 500;
-  }
-
-  &__input {
-    outline: none;
-    margin-bottom: 10px;
-  }
-
-  &__question {
-    &:not(:last-child) {
-      margin-bottom: 25px;
-    }
-  }
-
-  &__correct-btn {
-    cursor: pointer;
-  }
-
-  &__option{
-      margin-left: 10px;
-
-      &--correct{
-          color: #00C853;
-      }
-
-      &--incorrect{
-          color: #D50000;
-      }
-  }
-}
 </style>

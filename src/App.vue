@@ -72,6 +72,10 @@ button{
   margin: 0 !important;
 }
 
+.u-no-list-style{
+  list-style: none;
+}
+
 .u-margin-bottom{
   margin-bottom: 1.3rem;
 }

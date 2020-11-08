@@ -3,22 +3,13 @@
     <header class="header">
       <h1 class="header__title u-f40">Wellcome Back {{user.name}}!</h1>
     </header>
+    <h2 class="home-main__title">Your Quizzes</h2>
     <main class="home-main">
-      <div class="home-main__card">
-        <h2>quiz 1</h2>
-      </div>
-      <div class="home-main__card">
-        <h2>quiz 2</h2>
-      </div>
-      <div class="home-main__card">
-        <h2>quiz 3</h2>
-      </div>
-      <div class="home-main__card">
-        <h2>quiz 4</h2>
-      </div>
-      <div class="home-main__card">
-        <h2>quiz 5</h2>
-      </div>
+      <router-link v-for="quiz in quizzes" :key="quiz._id" :to="{ name:'takeQuiz',params:{id:quiz._id} }" class="home-main__card">
+        <h2>{{quiz.name}}</h2>
+        <div class="home-main__preview-cover"></div>
+        <iframe class="home-main__preview" :src="`/quiz/${quiz._id}/take`" frameborder="0"></iframe>
+      </router-link>
     </main>
   </div>
   <Wellcome v-else />
@@ -37,12 +28,15 @@ export default {
       quizId:null,
     };
   },
+  created(){
+  
+  },
   methods:{
     goToQuizPage(id){this.$router.push({name:'quizPage',params:{id}})},
     goToAssignedQuiz(id){this.$router.push({name:'takeQuiz',params:{id}})},
   },
   computed: {
-    storeQuizzes() {
+    quizzes() {
       return this.$store.state.quizzes;
     },
     user(){
@@ -56,23 +50,55 @@ export default {
   display: flex;
   flex-wrap: wrap;
 
+  &__title{
+    text-align: center;
+    display: block;
+    font-family: 'wendy one';
+    letter-spacing: .1rem;
+    font-size: 2rem;
+    margin-bottom: 3rem;
+  }
+
   &__card{
-    height: 20rem;
+    height: 15rem;
     width: 15rem;
-    background: orangered;
+    background: #eeeeee;
     position: relative;
+    box-shadow: 3px 6px 5px rgba(0, 0, 0, 0.25);
     margin: 1rem;
+    text-align: center;
+    font-family: 'wendy one';
+    border-radius: .3rem;
+    letter-spacing: .1rem;
+    color: currentColor;
+    text-decoration: none;
+    padding: .4rem;
+    transition: all .2s;
+
+    &:hover,&:focus{
+      transform: translateY(-.5rem);
+    }
   }
 
   &__preview{
-    z-index: 100;
-    width: 100rem;
-    height: 50rem;
-    position: absolute;
-    top: -97%;
-    left:-283%;
     background: #ffffff;
-    transform: scale(.14);
+    z-index: 2;
+  }
+
+  &__preview-cover{
+    z-index: 3;
+  }
+
+  &__preview,&__preview-cover{
+    width: 140rem;
+    height: 100rem;
+    transform: scale(0.1);
+    position: absolute;
+    top: -280%;
+    left: -416.8%;
+    user-select: none;
+    border-radius: 2rem;
+    cursor: pointer;
   }
 
 }

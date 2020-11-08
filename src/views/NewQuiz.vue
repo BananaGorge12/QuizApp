@@ -42,6 +42,7 @@
             <textarea class="quiz-maker-main__textarea" cols="30" rows="10" v-model="question.text"></textarea>
           </div>
         </li>
+        <button v-if="questions.length > 0" @click="saveQuiz" class="quiz-maker-main__save-btn form__btn">Save</button>
       </ul>
     </form>
     <div tabindex="0" class="quiz-maker__nq-container">
@@ -251,6 +252,22 @@ export default {
 
       &:focus{
         border-bottom:.4rem solid #4396da;
+      }
+    }
+
+    &__save-btn{
+      font-family: 'wendy one';
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      margin-top: 4rem;
+
+      &:hover,:focus{
+          transform: translateX(-50%) translateY(-.3rem);
+      }
+
+      &:active{
+          transform: translateX(-50%) translateY(-.1rem);
       }
     }
 
