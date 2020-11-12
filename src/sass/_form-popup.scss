@@ -1,5 +1,7 @@
 .form-popup{
     font-family: 'wendy one';
+    position: relative;
+    z-index: 100;
 
     &__overlay{
         height: 100vh;
@@ -23,10 +25,11 @@
         animation: fade-in .4s;
         text-align: center;
         border-radius: .3rem;
+        max-width: 30rem;
     }
 
     &__title{
-        font-size: 2rem;
+        font-size: 1.7rem;
         margin-bottom: 2rem;
         letter-spacing: .05rem;
     }
@@ -34,7 +37,7 @@
     &__input{
         display: block;
         width: 100%;
-        font-size: 2rem;
+        font-size: 1.7rem;
         border-bottom: .3rem solid;
         margin-bottom: 3rem;
         outline: none;
@@ -64,5 +67,26 @@
         &:active{
             background-color: darken(#0085FF,10);
         }
+
+        &--red{
+            background-color: #F44336;
+
+            &:hover,&:focus{
+                background-color: darken(#F44336,5);
+            }
+    
+            &:active{
+                background-color: darken(#F44336,10);
+            }
+        }
+    }
+
+    &__icon{
+        width: 1.4rem;
+        height: 1.4rem;
+        position: absolute;
+        top: .7rem;
+        right: 1rem;
+        cursor: pointer;
     }
 }

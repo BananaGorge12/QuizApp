@@ -14,7 +14,7 @@
       </div>
       <div class="form__field">
         <input v-model="password" class="form__text" id="profile-password" type="name">
-        <label for="profile-password">Password</label>
+        <label for="profile-password">New Password</label>
       </div>
       <button class="form__btn">Save</button>
     </form>

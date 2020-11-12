@@ -5,15 +5,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    //user data
     user: null,
-    //quizzes
     quizzes:null,
+    assignedQuizzes:null,
   },
   mutations: {
     //send data to state
     loadUserData: (state, payload) => (state.user = payload),
     loadQuizzes: (state, payload) => (state.quizzes = payload),
+    loadAssignedQuizzes:(state,payload) => (state.assignedQuizzes = payload), 
     //remove quiz from state
     removeQuiz(state,payload){
       state.quizzes = state.quizzes.filter(quiz => quiz._id != payload)

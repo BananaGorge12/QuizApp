@@ -85,4 +85,9 @@ button{
 .u-margin-bottom{
   margin-bottom: 1.3rem;
 }
+
+.u-center{
+  display: flex;
+  align-items: center;
+}
 </style>

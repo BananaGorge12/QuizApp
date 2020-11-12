@@ -57,7 +57,7 @@ export default {
     top: 2rem;
     right: 1.2rem;
     overflow: hidden;
-    transition: all .8s cubic-bezier(.54,.01,.02,.98);
+    transition: all .5s cubic-bezier(.54,.01,.02,.98);
     border-radius: .7rem;
     white-space: nowrap;
     outline: none;
@@ -96,7 +96,7 @@ export default {
       fill: #f7f7f7;
       width: 5rem;
       height: 100%;
-      transition: all .8s;
+      transition: all .5s;
       z-index: 20;
       outline: none;
       opacity: 1;

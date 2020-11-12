@@ -1,11 +1,18 @@
 <template>
   <div class="quiz-maker">
     <header class="header">
-      <h1 class="header__title u-f40">THE QUIZ MAKER!</h1>
+      <h1 class="header__title u-f40">THE QUIZ MAKER 3000!</h1>
     </header>
     <form @submit.prevent class="quiz-main quiz-maker-main">
+      <input class="quiz-maker__name-input" type="text" v-model="quizName">
       <ul>
         <li v-for="(question,index) in questions" :key="index">
+          <svg @click="deleteQuestion(index)" class="quiz-maker-main__deleteQuestionBtn icon icon-bin2">
+            <symbol id="icon-bin2" viewBox="0 0 32 32">
+              <path d="M6 32h20l2-22h-24zM20 4v-4h-8v4h-10v6l2-2h24l2 2v-6h-10zM18 4h-4v-2h4v2z"></path>
+            </symbol>
+            <use xlink:href="#icon-bin2"></use>
+          </svg>
           <div v-if="question.type == 'multi'" class="quiz__question quiz__muli-choice">
             <input :value="question.title" type="text" class="quiz-maker-main__question-title">
             <ul class="quiz-main__list u-indent">
@@ -83,6 +90,29 @@ export default {
     if(!this.user){
       return this.$router.push({ name:'Home' })
     }
+
+    //loads quiz from loacal storge
+    if(localStorage.getItem('newQuiz')){
+      let quiz = localStorage.getItem('newQuiz')
+
+      quiz = JSON.parse(quiz)
+
+      this.quizName = quiz.name
+      this.questions = quiz.question
+    }
+
+
+    //save quiz every 10 sec
+    setInterval(() => {
+      let localQuiz = {
+        name:this.quizName,
+        question:this.questions
+      }
+
+      localQuiz = JSON.stringify(localQuiz)
+
+      localStorage.setItem('newQuiz',localQuiz)
+    },10000)
   },
   methods: {
     deleteQuestion(questionIndex){
@@ -241,6 +271,22 @@ export default {
 }
 .quiz-maker{
 
+  &__name-input{
+    text-align: center;
+    width: 50%;
+    border-bottom:solid .2rem;
+    margin: 0 auto;
+    display: block;
+    outline: none;
+    font-family: 'wendy one';
+    letter-spacing: .03rem;
+    transition: all .4s;
+
+    &:focus{
+      border-bottom:#248CEC solid .2rem;
+    }
+  }
+
   &-main{
     font-size: 2rem;
 
@@ -252,6 +298,26 @@ export default {
 
       &:focus{
         border-bottom:.4rem solid #4396da;
+      }
+    }
+
+    &__deleteQuestionBtn{
+      display: inline-block;
+      height: 1.7rem;
+      width: 1.7rem;
+      position: relative;
+      top: 2.6rem;
+      left: -3rem;
+      cursor: pointer;
+      fill: #757575;
+      transition: all .2s;
+
+      &:hover,&:focus{
+        fill: darken(#757575,5);
+      }
+
+      &:active{
+        fill: darken(#757575,10);
       }
     }
 
@@ -379,6 +445,7 @@ export default {
     transform: translateY(0);
     box-shadow: 3px 5px 4px rgba(0, 0, 0, 0.25);
     cursor: pointer;
+    user-select: none;
 
     .quiz-maker__nq-btn{
       opacity: 0;

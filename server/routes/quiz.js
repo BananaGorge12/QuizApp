@@ -6,6 +6,7 @@ const email = require('../emails/quizEmails')
 //auth middlware
 const auth = require('../middleware/auth')
 const User = require('../models/user')
+const quizEmails = require('../emails/quizEmails')
 
 //create new quiz
 router.post('/api/quiz',auth,async (req,res) => {
@@ -62,6 +63,28 @@ router.get('/api/quiz',auth,async (req,res) => {
         res.status(500).send('Server error') 
     }
 })
+
+
+//get all assigend quizzes
+router.get('/api/quiz/assigend',auth,async (req,res) => {
+    try {
+        let quizzes = []
+
+        for(let index = 0;index < req.user.assignedQuizzes.length;index++){
+            const quiz = await Quiz.findById(req.user.assignedQuizzes[index].id)
+            quizzes.push(quiz)
+        }
+    
+        if(!quizzes){
+            return res.status(404).send('No Quizzes Found')
+        }
+        
+        res.send(quizzes)
+    } catch (err) {
+        res.status(500).send('Server error') 
+    }
+})
+
 
 
 //get quiz by id
@@ -158,6 +181,7 @@ router.post('/api/quiz/:id/students', auth, async (req,res) => {
 })
 
 
+//removes a student
 router.delete('/api/quiz/:id/students',auth,async (req,res) => {
     try {
         const quiz = await Quiz.findOne({ _id:req.params.id, owner:req.user._id })
@@ -201,33 +225,55 @@ router.post('/api/quiz/:id/answer',auth,async (req,res) => {
             return res.status(404).send({ error:'Quiz not found' })
         }
 
+        if(quiz.owner == req.user._id){
+            return res.status(400).send({ error:'Cannot Answer Your Own Quiz' })
+        }
+
         const studentAlreadyAnswers = quiz.answers.filter(answer => answer.email == req.user.email)
 
         if(studentAlreadyAnswers.length > 0){
             return res.status(400).send({ error:'Student has already answered' })
         }
+        console.log(res.body)
 
         quiz.answers.push({...req.body})
-
-
-        //makes the email message
-        let emailAnswerString = `<h1>${req.user.name} has answered your quiz!<h1><h2>score: ${req.body.score}</h2><ul>`
-
-        //adds answers
-        req.body.answers.forEach(answer => {
-            emailAnswerString += `<li><h3>Question: ${answer.title}</h3><h3>His Answer: ${answer.answer}</h3><li>`
-        })
-        
-        emailAnswerString += '</ul>'
-
-        email.sendHtmlEmail(quizOwner.email,`${req.user.name} has answered you quiz!`,''+emailAnswerString)
-
 
         await quiz.save()
 
         res.send(quiz)
     } catch (err) {
         res.status(500).send('Server error')  
+    }
+})
+
+
+//updating student's score
+router.patch('/api/:id/answer',auth,async (req,res) => {
+    try {
+        const quiz = await Quiz.findOne({ _id:req.params.id, owner:req.user._id })
+
+        if(!req.query.sid){
+            return res.send({ error:'Please Provide A User id' })
+        }
+
+        const studentData = quiz.students.filter(student => student.id == req.query.sid)[0]
+
+        quiz.answers = quiz.answers.filter(answer => answer.email != studentData.email)
+
+        req.body = {
+            ...req.body,
+            ...studentData
+        }
+
+        delete req.body.id
+
+        quiz.answers.push(req.body)
+        
+        await quiz.save()
+        
+        res.send(req.body)
+    } catch (err) {
+        res.status(500).send(`${err}`)
     }
 })
 

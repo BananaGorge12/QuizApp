@@ -43,6 +43,16 @@ if(localStorage.getItem('token')){
       //puts quizzes in store
       store.commit('loadQuizzes',quizzes.data)
 
+      //get assigendQuizzes
+      const assigendQuizzes = await axios.get('/api/quiz/assigend',{
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+
+      store.commit('loadAssignedQuizzes',assigendQuizzes.data)
+
+
       //loads vue
       loadVue()
 
@@ -52,6 +62,7 @@ if(localStorage.getItem('token')){
     }
   }
 
+  //gets data from db
   getData()
 
 }else{

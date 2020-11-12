@@ -17,3 +17,9 @@
         transform: translateY(0);
     }
 }
+
+
+@keyframes loader {
+    from { transform: translateY(0) }
+    to { transform: translateY(-100px) }
+  }

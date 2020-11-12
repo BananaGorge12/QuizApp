@@ -3,14 +3,21 @@
     <header class="header">
       <h1 class="header__title u-f40">Wellcome Back {{user.name}}!</h1>
     </header>
-    <h2 class="home-main__title">Your Quizzes</h2>
-    <main class="home-main">
+    <h2 v-if="quizzes.length > 0" class="home-main__title">Your Quizzes</h2>
+    <main v-if="quizzes.length > 0" class="home-main">
       <router-link v-for="quiz in quizzes" :key="quiz._id" :to="{ name:'quizPage',params:{id:quiz._id} }" class="home-main__card">
         <h2>{{quiz.name}}</h2>
         <div class="home-main__preview-cover"></div>
-        <iframe tabindex="-1" class="home-main__preview" :src="`/quiz/${quiz._id}/take`" frameborder="0"></iframe>
       </router-link>
     </main>
+    <h2 v-if="assignedQuizzes.length > 0" class="home-main__title">Your Assigned Quizzes</h2>
+    <main v-if="assignedQuizzes.length > 0" class="home-main">
+      <router-link v-for="quiz in assignedQuizzes" :key="quiz._id" :to="{ name:'takeQuiz',params:{id:quiz._id} }" class="home-main__card">
+        <h2>{{quiz.name}}</h2>
+        <div class="home-main__preview-cover"></div>
+      </router-link>
+    </main>
+    <h2 v-if="assignedQuizzes.length <= 0 && quizzes.length <= 0" class="home-main__title">No Quizzes... yet!</h2>
   </div>
   <Wellcome v-else />
 </template>
@@ -38,6 +45,9 @@ export default {
   computed: {
     quizzes() {
       return this.$store.state.quizzes;
+    },
+    assignedQuizzes(){
+      return this.$store.state.assignedQuizzes
     },
     user(){
       return this.$store.state.user
