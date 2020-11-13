@@ -61,22 +61,45 @@ export default {
     },
     methods:{
         setQuiz(){
-            this.assignedQuizzes.forEach(quiz => {
-                if(quiz._id == this.$route.params.id){
-                    return this.quiz = quiz
-                }
-            })
-
-            this.quizzes.forEach(quiz => {
-                if(quiz._id == this.$route.params.id){
-                    return this.quiz = quiz
-                }
-            })
-
-            if(!this.quiz){
-                return this.$router.push({ name: "Home" });
+            //checks if user is a students
+            if(this.assignedQuizzes){
+                this.assignedQuizzes.forEach(quiz => {
+                    if(quiz._id == this.$route.params.id){
+                        return this.quiz = quiz
+                    }
+                })
             }
 
+            //checks if user is owner
+            if(this.quizzes){
+                this.quizzes.forEach(quiz => {
+                    if(quiz._id == this.$route.params.id){
+                        return this.quiz = quiz
+                    }
+                })
+            }
+
+            //if user is not owner or studnet kicks him
+            if(!this.quiz){
+                console.log(this.$route.query.token)
+                if(this.$route.query.token){
+                    axios.get(`/api/quiz/${this.$route.params.id}`,{
+                        headers: {
+                          'Authorization': `Bearer ${this.$route.query.token}`
+                        }
+                    }).then(res => {
+                        this.quiz = res.data
+                    }).catch(() => {
+                        return this.$router.push({ name: "Home" });
+                    })
+
+                }else{
+                    return this.$router.push({ name: "Home" });
+                }
+
+            }
+
+            //adds an id to each multi choice question
             this.quiz.questions.forEach(question => {
                 if(question.type == 'multi'){
                     question.nameId = uniqid()

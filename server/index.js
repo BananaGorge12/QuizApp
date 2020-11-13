@@ -20,6 +20,8 @@ const userRoutes = require('./routes/user')
 app.use(userRoutes)
 const quizRoutes = require('./routes/quiz')
 app.use(quizRoutes)
+const imgRoutes = require('./routes/img')
+app.use(imgRoutes)
 
 
 

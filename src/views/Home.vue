@@ -4,29 +4,34 @@
       <h1 class="header__title u-f40">Wellcome Back {{user.name}}!</h1>
     </header>
     <h2 v-if="quizzes.length > 0" class="home-main__title">Your Quizzes</h2>
-    <main v-if="quizzes.length > 0" class="home-main">
+    <section v-if="quizzes.length > 0" class="home-main">
       <router-link v-for="quiz in quizzes" :key="quiz._id" :to="{ name:'quizPage',params:{id:quiz._id} }" class="home-main__card">
-        <h2>{{quiz.name}}</h2>
-        <div class="home-main__preview-cover"></div>
+        <h2 class="home-main__card-title">{{quiz.name}}</h2>
+        <img draggable="false" v-if="quiz.img" :src="`data:image/png;base64, ${quiz.img}`" class="home-main__preview">
+        <Loader class="loader__card" v-else />
       </router-link>
-    </main>
+    </section>
     <h2 v-if="assignedQuizzes.length > 0" class="home-main__title">Your Assigned Quizzes</h2>
-    <main v-if="assignedQuizzes.length > 0" class="home-main">
+    <section v-if="assignedQuizzes.length > 0" class="home-main">
       <router-link v-for="quiz in assignedQuizzes" :key="quiz._id" :to="{ name:'takeQuiz',params:{id:quiz._id} }" class="home-main__card">
-        <h2>{{quiz.name}}</h2>
-        <div class="home-main__preview-cover"></div>
+        <h2 class="home-main__card-title">{{quiz.name}}</h2>
+        <img draggable="false" v-if="quiz.img" :src="`data:image/png;base64, ${quiz.img}`" class="home-main__preview">
+        <Loader class="loader__card" v-else />
       </router-link>
-    </main>
+    </section>
     <h2 v-if="assignedQuizzes.length <= 0 && quizzes.length <= 0" class="home-main__title">No Quizzes... yet!</h2>
   </div>
   <Wellcome v-else />
 </template>
 <script>
 import Wellcome from '../components/Wellcome'
+import Loader from '../components/Loader'
+import axios from 'axios'
 export default {
   name: "Home",
   components:{
-    Wellcome
+    Wellcome,
+    Loader,
   },
   data() {
     return {
@@ -36,11 +41,42 @@ export default {
     };
   },
   created(){
-  
+     this.getPreviewImg()
   },
   methods:{
     goToQuizPage(id){this.$router.push({name:'quizPage',params:{id}})},
     goToAssignedQuiz(id){this.$router.push({name:'takeQuiz',params:{id}})},
+    //gets preview img
+    async getPreviewImg(){
+      await this.quizzes.forEach(async quiz => {
+        await axios.get(`/api/preview/quiz/${quiz._id}`,{
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        }).then(res => {
+          quiz.img = res.data
+        }).catch(err => {
+          console.error(err.response)
+        })
+
+        this.$forceUpdate()
+      })
+
+      await this.assignedQuizzes.forEach(async quiz => {
+        await axios.get(`/api/preview/quiz/${quiz._id}`,{
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        }).then(res => {
+          quiz.img = res.data
+        }).catch(err => {
+          console.error(err.response)
+        })
+
+        this.$forceUpdate()
+      })
+
+    },
   },
   computed: {
     quizzes() {
@@ -70,7 +106,7 @@ export default {
   }
 
   &__card{
-    height: 15rem;
+    height: 16rem;
     width: 15rem;
     background: #eeeeee;
     position: relative;
@@ -91,25 +127,8 @@ export default {
     }
   }
 
-  &__preview{
-    background: #ffffff;
-    z-index: 2;
-  }
-
-  &__preview-cover{
-    z-index: 3;
-  }
-
-  &__preview,&__preview-cover{
-    width: 140rem;
-    height: 100rem;
-    transform: scale(0.1);
-    position: absolute;
-    top: -280%;
-    left: -416.8%;
-    user-select: none;
-    border-radius: 2rem;
-    cursor: pointer;
+  &__card-title{
+    margin-bottom: 1rem;
   }
 
 }

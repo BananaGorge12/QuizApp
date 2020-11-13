@@ -42,5 +42,9 @@ export default {
             opacity: 0.4;
         }
     }
+
+    &__card{
+        margin-top:4.5rem ;
+    }
 }
 </style>

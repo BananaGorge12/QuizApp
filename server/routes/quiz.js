@@ -1,12 +1,10 @@
 const express = require('express')
 const router = new express.Router()
 const Quiz = require('../models/quiz')
-const email = require('../emails/quizEmails')
 
 //auth middlware
 const auth = require('../middleware/auth')
 const User = require('../models/user')
-const quizEmails = require('../emails/quizEmails')
 
 //create new quiz
 router.post('/api/quiz',auth,async (req,res) => {
@@ -88,7 +86,7 @@ router.get('/api/quiz/assigend',auth,async (req,res) => {
 
 
 //get quiz by id
-router.get('/api/quiz/:id',async (req,res) => {
+router.get('/api/quiz/:id',auth,async (req,res) => {
     try {
        const quiz = await Quiz.findById(req.params.id)
        
@@ -96,7 +94,27 @@ router.get('/api/quiz/:id',async (req,res) => {
            return res.status(404).send({ error:'Unable to find quiz' })
        }
 
-       res.send(quiz)
+       let isUserAllowed = false;
+
+       //if user is owner
+       if(`${req.user._id}` == `${quiz.owner}`){
+        isUserAllowed = true 
+       }
+
+       //test to see if user is a studnet
+       if(!isUserAllowed){
+           quiz.students.forEach(student => {
+               if(`${student.id}` == `${req.user._id}`){
+                   return isUserAllowed = true
+               }
+           })
+       }
+
+       if(isUserAllowed){
+        return res.send(quiz)
+       }
+
+       res.status(404).send()
     } catch (err) {
         res.status(500).send('Server error') 
     }
