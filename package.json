@@ -12,12 +12,10 @@
     "git:add": "git add .",
     "git:fix": "git commit -m\"fix\"",
     "git:push": "git push origin master",
-    "heroku:commit": "git commit -m\"deploy\"",
-    "heroku:push": "git push heroku master",
-    "push": "npm-run-all git:push heroku:push",
     "fix": "npm-run-all git:add git:fix git:push",
-    "deploy": "npm-run-all build git:add heroku:commit heroku:push",
-    "master": "npm-run-all build git:add heroku:commit git:push heroku:push"
+    "heroku:push":"heroku container:push web",
+    "heroku:release":"heroku container:release web",
+    "deploy": "npm-run-all build heroku:push heroku:release"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.3.0",
