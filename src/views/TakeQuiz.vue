@@ -1,7 +1,7 @@
 <template>
     <div v-if="quiz" class="take-quiz">
         <header class="header">
-            <h1 class="header__title">{{ quiz.name }}</h1>
+            <h1 class="header__title u-f40">{{ quiz.name }}</h1>
         </header>
         <form @submit.prevent="turnInQuiz" class="quiz-main">
             <ul>

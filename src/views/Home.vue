@@ -107,7 +107,7 @@ export default {
 
   &__card{
     height: 16rem;
-    width: 15rem;
+    min-width: 15rem;
     background: #eeeeee;
     position: relative;
     box-shadow: 3px 6px 5px rgba(0, 0, 0, 0.25);
