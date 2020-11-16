@@ -15,7 +15,19 @@ const quizSchema = mongoose.Schema({
     },
     students:[],
     answers:[],
+    background:{},
 })
+
+
+//deletes private data before sending to user
+quizSchema.methods.toJSON = function() {
+    const userObject = this.toObject()
+
+    delete userObject.background
+
+    return userObject
+}
+
 
 
 const Quiz = mongoose.model('Quiz',quizSchema)

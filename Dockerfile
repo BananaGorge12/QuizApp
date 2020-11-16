@@ -1,5 +1,6 @@
 FROM node:14
 
+# gets puppeteer
 RUN apt-get update \
     && apt-get install -y wget gnupg \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
@@ -25,6 +26,7 @@ RUN npm i puppeteer \
 USER pptruser
 
 
+# docker config
 WORKDIR /app
 
 COPY package*.json ./

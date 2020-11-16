@@ -1,0 +1,126 @@
+.settings{
+    animation: fade-in .2s;
+
+    &__btn{
+        height: 4rem;
+        width: 4rem;
+        position: absolute;
+        z-index: 1;
+        top: 2rem;
+        left: 2rem;
+        fill: #d4d4d4;
+        cursor: pointer;
+        transition: transform .5s ease, fill .1s linear;
+        outline: none;
+
+        &:hover,&:focus{
+            transform: rotateZ(360deg);
+        }
+
+        &:active{
+            fill: darken(#d4d4d4,5);
+        }
+    }
+
+    &__popup{
+        background-color: rgba(#000000,.7);
+        z-index: 2;
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+    }
+
+    &__content{
+        background-color: #ffffff;
+        font-family: 'wendy one';
+        width: 50%;
+        min-height:20% ;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        border-radius:.2rem ;
+        box-shadow: 3px 4px 7px rgba(0, 0, 0, 0.4);
+        text-align: center;
+
+        li{
+            text-align: left;
+            margin-left: 3rem;
+
+            h2{
+                margin-bottom: .5rem;
+            }
+            
+            input[type=file]{
+                display: none;
+            }
+
+            button{
+                background-color: #adff2f;
+                font-size: 1rem;
+                padding: .7rem 1.2rem;
+                border-radius: .3rem;
+                margin: 0 .7rem;
+                transition: all .2s;
+                outline: none;
+
+                &:hover,&:focus{
+                 background-color: darken(#adff2f,10);   
+                }
+
+                &:active{
+                    background-color: darken(#adff2f,15);   
+                }
+
+                &:last-of-type{
+                    margin-left:0 ;
+                    background-color: #df2d2d;
+
+                    &:hover,&:focus{
+                        background-color: darken(#df2d2d,10);   
+                       }
+       
+                    &:active{
+                        background-color: darken(#df2d2d,15);   
+                    }
+                }
+            }
+        }
+    }
+
+    &__new-quiz-background-btn{
+        background-color: #339DFF;
+        color: #ffffff;
+        padding: .7rem 1.2rem;
+        border-radius: .3rem;
+        cursor: pointer;
+        user-select: none;
+        transition: all .2s;
+        font-size: 1.3rem;
+    }
+
+    input[type=file]:active + .settings__new-quiz-background-btn{
+        background-color: darken(#339DFF,7);
+    }
+
+    &__feedback{
+       position: absolute;
+       bottom: .5rem;
+       left: 50%;
+       transform: translateX(-50%); 
+       color: #ff9d00;
+    }
+
+    &__fileName{
+        user-select: none;
+    }
+
+    &__close-btn{
+        height: 1.5rem;
+        width: 1.5rem;
+        position: absolute;
+        right: 1rem;
+        top: .4rem;
+        cursor: pointer;
+    }
+}

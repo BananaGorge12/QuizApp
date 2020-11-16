@@ -1,8 +1,10 @@
 <template>
   <div class="quiz-maker">
+    <!-- header -->
     <header class="header">
       <h1 class="header__title u-f40">THE QUIZ MAKER 3000!</h1>
     </header>
+    <!-- quizmaker -->
     <form @submit.prevent class="quiz-main quiz-maker-main">
       <input class="quiz-maker__name-input" type="text" v-model="quizName">
       <ul>
@@ -83,7 +85,9 @@ export default {
       ytPopup:false,
       ytLink:null,
       questions: [],
-      quizName:'New Quiz'
+      quizName:'New Quiz',
+      settingsPopup:false,
+      bgImg:null,
     };
   },
   created() {
@@ -198,6 +202,7 @@ export default {
 };
 </script>
 <style lang="scss">
+@import '../sass/settings';
 .ytpopup{
 
   &__overlay{

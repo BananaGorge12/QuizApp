@@ -1,11 +1,11 @@
 <template>
     <div v-if="quiz" class="take-quiz">
         <header class="header">
-            <h1 class="header__title u-f40">{{ quiz.name }}</h1>
+            <h1 class="header__title">{{ quiz.name }}</h1>
         </header>
-        <form @submit.prevent="turnInQuiz" class="quiz-main">
+        <form :style="bgImgStyle" @submit.prevent="turnInQuiz" class="quiz-main">
             <ul>
-                <li v-for="(question,index) in quiz.questions" :key="index">
+                <li class="quiz__question" v-for="(question,index) in quiz.questions" :key="index">
                     <div v-if="question.type == 'text'" class="quiz__text-question">
                         <h3 class="quiz__title">{{ question.title }}</h3>
                         <input type="text" v-model="question.studentAnswer" class="quiz__answer-input" placeholder="Answer">
@@ -54,6 +54,7 @@ export default {
             score:null,
             loading:false,
             currentId:null,
+            bgImgStyle:`background-image: url('/api/quiz/${this.$route.params.id}/background?token=${localStorage.getItem('token')}');`,
         }
     },
     async created(){
