@@ -53,6 +53,16 @@ if(localStorage.getItem('token')){
       store.commit('loadAssignedQuizzes',assigendQuizzes.data)
 
 
+      //get classes
+      const classes = await axios.get('/api/classes',{
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+
+      store.commit('loadClasses',classes.data)
+
+
       //loads vue
       loadVue()
 

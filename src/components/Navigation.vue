@@ -7,11 +7,13 @@
       <use xlink:href="#icon-menu"></use>
     </svg>
     <ul class="navbar__list">
-      <li v-if="!user"><router-link class="navbar__item" to="/">Home</router-link></li>
+      <li><router-link class="navbar__item" to="/">Home</router-link></li>
+      <!-- no logged in -->
       <li v-if="!user"><router-link class="navbar__item" to="/login">Login</router-link></li>
       <li v-if="!user"><router-link class="navbar__item" to="/signup">Signup</router-link></li>
-      <li v-if="user"><router-link class="navbar__item" to="/">Home</router-link></li>
+      <!-- loged in -->
       <li v-if="user"><router-link class="navbar__item" to="/new-quiz">New Quiz</router-link></li>
+      <li v-if="user"><router-link class="navbar__item" to="/classes">Classes</router-link></li>
       <li v-if="user"><router-link class="navbar__item" to="/profile">Profile</router-link></li>
       <li v-if="user"><button @click="logout" class="navbar__item">Logout</button></li>
     </ul>
@@ -73,7 +75,7 @@ export default {
     transform: scaleX(.4);
 
     &:focus,&:focus-within{
-      max-height: 17.9rem;
+      max-height: 21.2rem;
       transform: scaleX(1);
       font-size: 1.4rem;
       width: 15rem;

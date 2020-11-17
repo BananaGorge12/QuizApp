@@ -57,7 +57,7 @@ export default {
             bgImgStyle:`background-image: url('/api/quiz/${this.$route.params.id}/background?token=${localStorage.getItem('token')}');`,
         }
     },
-    async created(){
+    created(){
         this.setQuiz()
     },
     methods:{
@@ -82,7 +82,6 @@ export default {
 
             //if user is not owner or studnet kicks him
             if(!this.quiz){
-                console.log(this.$route.query.token)
                 if(this.$route.query.token){
                     axios.get(`/api/quiz/${this.$route.params.id}`,{
                         headers: {
@@ -90,6 +89,7 @@ export default {
                         }
                     }).then(res => {
                         this.quiz = res.data
+                        this.bgImgStyle = `background-image: url('/api/quiz/${this.$route.params.id}/background?token=${localStorage.getItem('token')}&t=${Date.now()}');`
                     }).catch(() => {
                         return this.$router.push({ name: "Home" });
                     })

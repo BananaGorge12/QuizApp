@@ -22,4 +22,15 @@
 @keyframes loader {
     from { transform: translateY(0) }
     to { transform: translateY(-100px) }
-  }
+}
+
+@keyframes sweep{
+    from{
+        opacity: 0;
+        margin-top: -1rem;
+    }
+    to{
+        opacity: 1;
+        margin-top: 1rem;
+    }
+}

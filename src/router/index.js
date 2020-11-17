@@ -7,9 +7,10 @@ import Signup from '../views/Signup.vue'
 import Profile from '../views/Profile.vue'
 import newQuiz from '../views/NewQuiz.vue'
 import editQuiz from '../views/EditQuiz.vue'
-import NotFound from '../views/404.vue'
 import takeQuiz from '../views/TakeQuiz.vue'
 import quizPage from '../views/QuizPage.vue'
+import Classes from '../views/Classes.vue'
+import NotFound from '../views/404.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,11 @@ const routes = [
     path:'/profile',
     name:'Profile',
     component:Profile
+  },
+  {
+    path:'/classes',
+    name:'classes',
+    component:Classes
   },
   {
     path:'/new-quiz',

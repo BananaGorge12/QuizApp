@@ -119,4 +119,24 @@ router.delete('/api/users/me',auth,async (req,res) => {
 })
 
 
+//vailded user by email for classes
+router.get('/api/users/validate',auth,async (req,res) => {
+    try {
+        const user = await User.findOne({ email:req.query.email })
+
+        if(!user){
+            return res.status(400).send({ error:'User With This Email Doesnt Exist' })
+        }
+
+        if(`${user._id}` === `${req.user._id}`){
+            return res.status(400).send({ error:'You Can Not Add Yourself' })
+        }
+    
+        res.send()
+    } catch (err) {
+        res.status(500).send({ error:'Server Error' })
+    }
+})
+
+
 module.exports = router

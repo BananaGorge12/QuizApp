@@ -22,6 +22,8 @@ const quizRoutes = require('./routes/quiz')
 app.use(quizRoutes)
 const imgRoutes = require('./routes/img')
 app.use(imgRoutes)
+const classRoutes = require('./routes/classes')
+app.use(classRoutes)
 
 
 

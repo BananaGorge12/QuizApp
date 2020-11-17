@@ -15,19 +15,12 @@ npm run server
 npm run dev
 ```
 
-### Run the production server
-npm run start
-
-
 ### Compiles and minifies for production
 ```
 npm run build
 ```
 
-### Lints and fixes files
+### Build Project And Build Docker And Deploy To Heroku
 ```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+npm run deploy
+``` 
