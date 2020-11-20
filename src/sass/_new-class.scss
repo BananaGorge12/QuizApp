@@ -71,6 +71,9 @@
         &__item{
             border-bottom: .1rem solid #b4b4b4;
             padding: .3rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
 
             &:first-of-type{
                 background-color: #238CEC !important;
@@ -121,11 +124,18 @@
         font-size: 1.2rem;
     }
 
-    svg{
+    &__close-btn{
         width: 2rem;
         height: 2rem;
         position: absolute;
         right: 1rem;
         cursor: pointer;
+    }
+
+    &__remove-student-btn{
+        height: 1.5rem;
+        width: 1.5rem;
+        cursor: pointer;
+        user-select: none;
     }
 }

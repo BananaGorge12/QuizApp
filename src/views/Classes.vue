@@ -10,24 +10,28 @@
                     <thead>
                         <tr class="class-table__head">
                             <th>Name</th>
-                            <th>Email</th><th/>
+                            <th>Email</th>
                         </tr>
                     </thead>
                     <tbody class="class-table__body">
                         <tr v-for="(student,index) in userClass.students" :key="index" class="class-table__item">
                             <td>{{ student.name }}</td>
                             <td>{{ student.email }}</td>
-                            <td><button class="class-table__btn">Remove</button></td>
                         </tr>
                     </tbody>
                 </table>
+                <div class="class__btn-wrapper">
+                    <button class="class__btn" @click="editClassPopup(userClass)">Edit</button>
+                    <button class="class__btn" @click="deleteClass(userClass._id)">Delete</button>
+                </div>
           </details>
       </main>
-      <button class="classes__new-btn" @click="newClassPopup = true">+</button>
+      <button class="classes__new-btn" @click="editClass = false;;newClassPopup = true">+</button>
       <!-- new class popup -->
       <div v-if="newClassPopup" class="classes-popup">
-        <form @submit.prevent="createNewQuiz" class="classes-popup__content">
-            <svg @click="newClassPopup = false" class="icon-cross">
+        <form @submit.prevent="createOrEditClass" class="classes-popup__content">
+            <!-- close popup btn -->
+            <svg @click="editClass = false;newClassPopup = false" class="icon-cross classes-popup__close-btn">
               <symbol id="icon-cross" viewBox="0 0 32 32">
                 <path d="M31.708 25.708c-0-0-0-0-0-0l-9.708-9.708 9.708-9.708c0-0 0-0 0-0 0.105-0.105 0.18-0.227 0.229-0.357 0.133-0.356 0.057-0.771-0.229-1.057l-4.586-4.586c-0.286-0.286-0.702-0.361-1.057-0.229-0.13 0.048-0.252 0.124-0.357 0.228 0 0-0 0-0 0l-9.708 9.708-9.708-9.708c-0-0-0-0-0-0-0.105-0.104-0.227-0.18-0.357-0.228-0.356-0.133-0.771-0.057-1.057 0.229l-4.586 4.586c-0.286 0.286-0.361 0.702-0.229 1.057 0.049 0.13 0.124 0.252 0.229 0.357 0 0 0 0 0 0l9.708 9.708-9.708 9.708c-0 0-0 0-0 0-0.104 0.105-0.18 0.227-0.229 0.357-0.133 0.355-0.057 0.771 0.229 1.057l4.586 4.586c0.286 0.286 0.702 0.361 1.057 0.229 0.13-0.049 0.252-0.124 0.357-0.229 0-0 0-0 0-0l9.708-9.708 9.708 9.708c0 0 0 0 0 0 0.105 0.105 0.227 0.18 0.357 0.229 0.356 0.133 0.771 0.057 1.057-0.229l4.586-4.586c0.286-0.286 0.362-0.702 0.229-1.057-0.049-0.13-0.124-0.252-0.229-0.357z"></path>
               </symbol>
@@ -38,9 +42,19 @@
             <button class="classes-popup__class-new-email-btn" @click.prevent="addNewEmail">+</button>
             <ul class="classes-popup__list">
                 <li v-if="newClassStudents.length" class="classes-popup__list__item">Emails:</li>
-                <li v-for="(email,index) in newClassStudents" :key="index" class="classes-popup__list__item">{{ email }}</li>
+                <li v-for="(email,index) in newClassStudents" :key="index" class="classes-popup__list__item">
+                    <span>{{ email }}</span>
+                    <!-- remove student btn -->
+                    <svg @click="removeStudent(index)" class="classes-popup__remove-student-btn icon-cross">
+                        <symbol id="icon-cross" viewBox="0 0 32 32">
+                            <path d="M31.708 25.708c-0-0-0-0-0-0l-9.708-9.708 9.708-9.708c0-0 0-0 0-0 0.105-0.105 0.18-0.227 0.229-0.357 0.133-0.356 0.057-0.771-0.229-1.057l-4.586-4.586c-0.286-0.286-0.702-0.361-1.057-0.229-0.13 0.048-0.252 0.124-0.357 0.228 0 0-0 0-0 0l-9.708 9.708-9.708-9.708c-0-0-0-0-0-0-0.105-0.104-0.227-0.18-0.357-0.228-0.356-0.133-0.771-0.057-1.057 0.229l-4.586 4.586c-0.286 0.286-0.361 0.702-0.229 1.057 0.049 0.13 0.124 0.252 0.229 0.357 0 0 0 0 0 0l9.708 9.708-9.708 9.708c-0 0-0 0-0 0-0.104 0.105-0.18 0.227-0.229 0.357-0.133 0.355-0.057 0.771 0.229 1.057l4.586 4.586c0.286 0.286 0.702 0.361 1.057 0.229 0.13-0.049 0.252-0.124 0.357-0.229 0-0 0-0 0-0l9.708-9.708 9.708 9.708c0 0 0 0 0 0 0.105 0.105 0.227 0.18 0.357 0.229 0.356 0.133 0.771 0.057 1.057-0.229l4.586-4.586c0.286-0.286 0.362-0.702 0.229-1.057-0.049-0.13-0.124-0.252-0.229-0.357z"></path>
+                        </symbol>
+                        <use xlink:href="#icon-cross"></use>
+                    </svg>
+                </li>
             </ul>
-            <button class="classes-popup__submit" v-if="newClassStudents.length > 2">Create!</button>
+            <button class="classes-popup__submit" v-if="!editClass && newClassStudents.length > 2">Create!</button>
+            <button class="classes-popup__submit" v-else-if="newClassStudents.length > 2">Save!</button>
             <span class="classes-popup__warring" v-if="newClassStudents.length <= 2">A Class Must Have At Lest 3 Students</span>
             <p v-if="popupFeedback" class="classes-popup__feedback">{{ popupFeedback }}</p>
         </form>
@@ -57,8 +71,10 @@ export default {
             newClassStudents:[],
             newEmail:null,
             newClassName:null,
+            editedClassId:null,
             popupFeedback:null,
             newClassPopup:false,
+            editClass:false,
         }
     },
     created(){
@@ -67,24 +83,66 @@ export default {
         }
     },
     methods:{
-        createNewQuiz(){
+        editClassPopup(userClass){
+            this.newClassName = userClass.name
+            this.newClassStudents = userClass.students.map(student => student.email)
+            this.editClass = true
+            this.editedClassId = userClass._id
+            this.newClassPopup = true
+        },
+        deleteClass(id){
+            axios.delete(`/api/classes/${id}`,{
+                headers:{
+                    Authorization:`Bearer ${localStorage.getItem('token')}`
+                }
+            }).then(res => {
+                let newClassArray = this.classes.filter(userClass => `${userClass._id}` !== `${res.data._id}`)
+                this.$store.commit('loadClasses',newClassArray)
+            }).catch(err => [
+                console.error(err.response.data)
+            ])
+        },
+        removeStudent(index){this.newClassStudents.splice(index,1)},
+        createOrEditClass(){
             const classConstructor  = {
                 name:this.newClassName,
                 students:this.newClassStudents,
             }
 
-            axios.post('/api/classes',classConstructor,{
-                headers:{
-                    'Authorization':`Bearer ${localStorage.getItem('token')}`
-                }
-            }).then(res => {
-                let newClassArray = this.classes
-                newClassArray.push(res.data)
-                this.$store.commit('loadClasses',newClassArray)
-                this.newClassPopup = false
-            }).catch(err => {
-                this.popupFeedback = err.response.data.error
-            })
+            if(!this.editClass){
+                //create new class
+                axios.post('/api/classes',classConstructor,{
+                    headers:{
+                        'Authorization':`Bearer ${localStorage.getItem('token')}`
+                    }
+                }).then(res => {
+                    let newClassArray = this.classes
+                    newClassArray.push(res.data)
+                    this.$store.commit('loadClasses',newClassArray)
+                    this.newClassPopup = false
+                }).catch(err => {
+                    this.popupFeedback = err.response.data.error
+                })
+            }else{
+                //edit class
+                axios.patch(`/api/classes/${this.editedClassId}`,classConstructor,{
+                    headers:{
+                        'Authorization':`Bearer ${localStorage.getItem('token')}`
+                    }
+                }).then(res => {
+                    let newClassArray = this.classes.map(userClass => {
+                        if(`${userClass._id}` === `${res.data._id}`){
+                            return res.data
+                        }
+                        return userClass
+                    })
+
+                    this.$store.commit('loadClasses',newClassArray)
+                    this.newClassPopup = false
+                }).catch(err => {
+                    this.popupFeedback = err.response.data.error
+                })
+            }
         },
         addNewEmail(){
             if(!this.newEmail){
@@ -150,6 +208,40 @@ export default {
 
             &:not(:last-of-type){
                 border-bottom: 0;
+            }
+
+            &__btn-wrapper{
+                display: flex;
+                justify-content: space-between;
+            }
+
+            &__btn{
+                background-color: #238CEC;
+                font-size: 2rem;
+                color: #ffffff;
+                padding: .4rem 1rem;
+                outline: none;
+                transition: all .2s;
+
+                &:last-of-type{
+                    background-color: #f12a2a;
+
+                    &:hover{
+                        background-color: darken(#f12a2a,10);
+                    }
+
+                    &:active{
+                        background-color: darken(#f12a2a,15);
+                    }
+                }
+
+                &:hover{
+                    background-color: darken(#238CEC,10);
+                }
+
+                &:active{
+                    background-color: darken(#238CEC,15);
+                }
             }
         }
 

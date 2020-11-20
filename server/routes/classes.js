@@ -49,4 +49,61 @@ router.get('/api/classes',auth,async (req,res) => {
 })
 
 
+//delete class
+router.delete('/api/classes/:id',auth,async (req,res) => {
+    try{
+        const userClass = await Class.findOneAndRemove({ _id:req.params.id,owner:req.user._id })
+
+        if(!userClass){
+            return res.status(404).send({ error:'Class Not Found' })
+        }
+
+        res.send(userClass)
+    }
+    catch{
+        res.status(500).send({ error:'Server Error' })
+    }
+})
+
+
+
+//edit class
+router.patch('/api/classes/:id',auth,async (req,res) => {
+    try {
+        const userClass = await Class.findOne({ owner:req.user._id,_id:req.params.id })
+
+        if(!userClass){
+            return res.status(404).send({ error:'Class Not Found' })
+        }
+
+        if(userClass.students.length < 3){
+            return res.status(400).send({ error:'Class Must Have At Least 3 Students' })
+        }
+
+        const newStudentsArr = []
+
+        for(let index = 0; index < req.body.students.length;index++){
+            const emails = req.body.students
+            const studnet = await User.findOne({ email:emails[index] })
+    
+            if(studnet){
+                newStudentsArr.push({
+                    email:studnet.email,
+                    name:studnet.name,
+                })
+            }
+        }
+
+        userClass.students = newStudentsArr
+
+        userClass.name = req.body.name
+
+        await userClass.save()
+        
+        res.send(userClass)
+    } catch (err) {
+        res.status(500).send({ error:'Server Error' })
+    }
+})
+
 module.exports = router
