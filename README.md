@@ -1,4 +1,6 @@
-# full
+# Quizit,Quiz app
+
+## NOTE: PROJECT IN NOT DONE AND WONT WORK CORRECTLY
 
 ## Project setup
 ```
