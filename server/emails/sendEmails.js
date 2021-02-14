@@ -1,13 +1,13 @@
-const { sendGridApiKey } = require('../keys/keys')
 const sgMail = require('@sendgrid/mail')
+require('dotenv').config()
 
 //uses api key
-sgMail.setApiKey(sendGridApiKey)
+sgMail.setApiKey(process.env.SENDGRIDKEY)
 
 
 const sendTextEmail = (to,subject,text) => {
     sgMail.send({
-        from:'quizapp@ilaydev.com',
+        from:'quizit@ilaydev.com',
         to,
         subject,
         text,
@@ -17,7 +17,7 @@ const sendTextEmail = (to,subject,text) => {
 
 const sendHtmlEmail = (to,subject,html) => {
     sgMail.send({
-        from:'quizapp@ilaydev.com',
+        from:'quizit@ilaydev.com',
         to,
         subject,
         html,

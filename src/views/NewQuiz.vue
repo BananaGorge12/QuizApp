@@ -90,6 +90,21 @@ export default {
       bgImg:null,
     };
   },
+  updated(){
+    //save quiz every 10 sec
+    if(this.questions.length > 0){
+      setInterval(() => {
+        let localQuiz = {
+          name:this.quizName,
+          question:this.questions
+        }
+        
+        localQuiz = JSON.stringify(localQuiz)
+
+        localStorage.setItem('newQuiz',localQuiz)
+      },1)
+    }
+  },
   created() {
     if(!this.user){
       return this.$router.push({ name:'Home' })
@@ -104,19 +119,6 @@ export default {
       this.quizName = quiz.name
       this.questions = quiz.question
     }
-
-
-    //save quiz every 10 sec
-    setInterval(() => {
-      let localQuiz = {
-        name:this.quizName,
-        question:this.questions
-      }
-
-      localQuiz = JSON.stringify(localQuiz)
-
-      localStorage.setItem('newQuiz',localQuiz)
-    },10000)
   },
   methods: {
     deleteQuestion(questionIndex){
@@ -130,10 +132,7 @@ export default {
         return true
       })
     },
-    getVideoId(url){
-      const id = new URLSearchParams(url).entries().next().value[1]
-      return id
-    },
+    getVideoId(url){return new URLSearchParams(url).entries().next().value[1]},
     addNewParagraph(){
       this.questions.push(        {
           type:'paragraph',
@@ -187,6 +186,9 @@ export default {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       }).then((res) => {
+          this.quizName = 'New Quiz'
+          this.questions = []
+          localStorage.removeItem('newQuiz')
           this.$store.commit('addQuiz',res.data)
           this.$router.push({name:'Home'})
       }).catch(err => {

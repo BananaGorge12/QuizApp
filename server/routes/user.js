@@ -1,7 +1,9 @@
 const express = require('express')
 const router = new express.Router()
-const User = require('../models/user')
 const bcrypt = require('bcryptjs')
+const User = require('../models/user')
+const emailMethods = require('../emails/sendEmails')
+const emails = require('../emails/emails')
 
 //auth middleware
 const auth = require('../middleware/auth')
@@ -9,14 +11,19 @@ const auth = require('../middleware/auth')
 //create new user
 router.post('/api/users/signup',async (req,res) => {
     try {
-        const user = new User(req.body)
-        await user.save()
+        // const user = new User(req.body)
+        // await user.save()
 
         //new auth token
-        const token = await user.generateAuthToken()
+        // const token = await user.generateAuthToken()
+
+        emailMethods.sendHtmlEmail(req.body.email,'Thanks For Signing up!',emails.verifyEmail.replace(/REPLACE_WITH_LINK/,'https://google.com'))
 
         //send
-        res.status(201).send({user,token})
+        // res.status(201).send({user,token})
+
+
+        res.send()
 
     } catch (err) {
         if(err.keyPattern.email){

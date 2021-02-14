@@ -5,7 +5,7 @@
   "scripts": {
     "build": "vue-cli-service build --dist ./server/dist",
     "lint": "vue-cli-service lint",
-    "db": "D:/db/bin/mongo.exe",
+    "db": "D:/db/bin/mongo.exe --config c:/db/mongod.cfg --install",
     "dev": "vue-cli-service serve",
     "server": "nodemon server/index.js -e js,vue",
     "start": "node server/index.js",
@@ -15,10 +15,11 @@
   },
   "dependencies": {
     "@sendgrid/mail": "^7.3.0",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "core-js": "^3.6.5",
     "detect-browser": "^5.2.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.2",
